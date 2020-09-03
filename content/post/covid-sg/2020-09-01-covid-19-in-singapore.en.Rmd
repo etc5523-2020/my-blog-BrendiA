@@ -23,11 +23,12 @@ link-citations: true
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 # Load library
 library(tidyverse)
 library(coronavirus) # devtools::install_github("RamiKrispin/coronavirus")
+library(DT)
 library(gganimate)
 library(janitor)
 library(lubridate)
@@ -35,6 +36,9 @@ library(tidycovid19) # remotes::install_github("joachim-gassen/tidycovid19")
 library(transformr)
 library(readxl)
 library(timevis)
+library(widgetframe)
+library(zoo)
+library(scales)
 ```
 
 The Covid-19 pandemic has altered people's lives, be it enormous or minute. Undoubtedly, there will be many stories told of how they 'survived' this pandemic down the road, fighting for toilet papers and masks and how bumping elbows were the norm etc. As a student, I'd like to add that group assignments studying online is a chore when you can't have face-to-face conversations. 
@@ -48,8 +52,9 @@ My first blog post is a short story of the COVID-19 situation in my home country
 ```{r read-in-data}
 # From coronavirus package: long format of covid cases
 sg_long <- coronavirus %>% 
-  filter(country == "Singapore") %>%
-  select(-province) # No province in Singapore
+  filter(country == "Singapore",
+         date != "2020-01-22") %>% # Show first case recorded onwards
+  select(-c(province, lat, long)) # No province in Singapore
 
 # Load data for all countries
 merged_df <- download_merged_data(cached = TRUE, silent = TRUE) 
@@ -58,7 +63,7 @@ sg_df <- merged_df %>%
   filter(country == "Singapore")
 ```
 
-```{r read-gdp, include = FALSE}
+```{r wrangle-gdp, include = FALSE}
 # read-in GDP data
 sg_gdp <- read_excel("OutputFile.xlsx")
 
@@ -78,6 +83,7 @@ sg_gdp <- sg_gdp %>% #
 sg_gdp <- sg_gdp %>%
   rownames_to_column('Year') %>%
   janitor::clean_names() # Remove spacings in variable names
+
 ```
 
 In this blog, three main data sets will be used.
@@ -115,24 +121,32 @@ sg_long <- sg_long %>%
           between(date, as.Date("2020-06-18"), as.Date("2020-09-01")) ~ "Phase 2 (Safe Transition)")
          )
 
+# Compute 3-day Rolling average 
+sg_long <- sg_long %>%
+  group_by(type) %>%
+  # 3-day rolling average
+  mutate(rolling_avg_cases = round(zoo::rollmean(cases, k = 3, fill = 0), digits = 2), 
+         cum_cases = cumsum(cases)) %>% # cumulative cases for each case type
+  relocate(phase, .after = cum_cases)
+
+# daily changes in cases
+sg_long <- sg_long %>%
+  mutate(lag_cases = lag(cum_cases, k = 1)) %>%
+  mutate(daily_prop_change = (cum_cases - lag_cases)/lag_cases)
+
 # Start and end date for each government intervention
 lockdown_dur <- sg_long %>% 
   group_by(phase) %>%
   summarise(start = min(date),
             end = max(date))
-
-# Cumulative sum of each case type
-sg_long <- sg_long %>%
-  group_by(type) %>%
-  mutate(cases_cum = cumsum(cases))
 ```
 
 ```{r static-cases}
-# Plot cases in a static plot
+# Static plot: 3-day rolling averages
 p1 <- ggplot(sg_long) +
   # plot covid cases
   geom_line(aes(x = date,
-                y = cases,
+                y = rolling_avg_cases,
                 colour = type),
             alpha = 0.8) +
   theme_bw() +
@@ -151,38 +165,16 @@ p1 <- ggplot(sg_long) +
                 ymin = -Inf, 
                 ymax = Inf,
                 fill = phase),
-            alpha = 0.15)
-
-# Cumulative sum
-p2 <- ggplot(sg_long) +
-  # plot covid cases
-  geom_line(aes(x = date,
-                y = cases_cum,
-                colour = type),
-            alpha = 0.8) +
-  theme_bw() +
-  scale_colour_manual(values = c("#bc3a3a", "#00468b" ,"#468b00")) +
-  theme(legend.position = "bottom") +
-  scale_x_date(date_breaks = "1 week", 
-               date_labels = "%b %d") +
-  theme(legend.position = "bottom",
-        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
-        panel.grid.minor.x = element_blank()) +
-  ggtitle("Number of confirmed, death and recovered COVID-19 Cases") +
-  # Colour each phase of government intervention 
-  geom_rect(data = lockdown_dur,
-            aes(xmin = start, 
-                xmax = end,
-                ymin = -Inf, 
-                ymax = Inf,
-                fill = phase),
-            alpha = 0.15)
+            alpha = 0.15) +
+  scale_fill_manual(values = c('#c74848', '#228b57', '#72bcd4', '#a284e0'))
 ```
 
 ```{r animate-cases}
-p1 + transition_reveal(date) 
-
-# p2 + transition_reveal(date) 
+# p1 + transition_reveal(date)
+# Show which lockdown phase the plot is on during animation
+# Show what major events were taking place at this time (e.g. general election or surge in dorm cases)
+# Play and stop button
+# Annotate important dates
 ```
 
 Why so little death? Is it attributed to great hospital equipment? Were there times when hospitals were over capacity?
@@ -194,11 +186,98 @@ Why so little death? Is it attributed to great hospital equipment? Were there ti
 
 ## Interactive table (with data story)
 
+```{r}
+# Replace inf, NaN and NA values with zero
+sg_long$daily_prop_change[!is.finite(sg_long$daily_prop_change)] <- 0
+
+# sg_long$daily_prop_change <- scales::percent(round(sg_long$daily_prop_change), digits = 4)
+
+sg_long <- sg_long %>%
+  mutate(daily_prop_change = round(daily_prop_change, digits = 2)) %>%
+         # daily_prop_change = scales::percent(daily_prop_change)) %>%
+  mutate(type = str_to_title(type)) # Capitalise first letter
+
+# Rearrange table
+tb1 <- sg_long %>%
+  select(-c(country, lag_cases)) %>%
+  relocate(phase, .after = daily_prop_change) %>%
+  relocate(rolling_avg_cases, .before = daily_prop_change)
+```
+
+```{r}
+tb1_interactive <- DT::datatable(tb1,
+              colnames = c('Date Recorded', 
+                           'Case Type', 
+                           'Number of Cases',
+                           'Cumulative Cases',
+                           '3-day Rolling Average Cases',
+                           'Daily Change in Cases (%)',
+                           'Phase'
+                           ),
+              filter = 'top',
+              rownames = FALSE,
+              extensions = "Scroller",
+              options = list(pageLength = 10,
+                             autoWidth = TRUE,
+                             scrollY = "250px")) %>%
+  formatPercentage('daily_prop_change', digits = 2) %>% # Format proportion to percentage
+  formatStyle(c('daily_prop_change'), `text-align` = 'right') %>% # Align values to the right 
+  # Colour background of each lockdown stage
+  formatStyle('phase',
+              backgroundColor = styleEqual(
+                unique(tb1$phase), c('#df9797', '#bfd9bf', '#d4ebf2', '#869cda'))
+              ) 
+
+# Frame table
+widgetframe::frameWidget(tb1_interactive)
+```
 
 
+## COVID-19 impact on Singapore's economy
+
+Undoubtedly, COVID-19 would have impact on Singapore's Economy. In this section, we will investigate which sector are most adversely affected by the outbreak.
+
+```{r wrangle-sgp-gdp}
+# Convert character variables to numeric
+sg_gdp <- sg_gdp %>%
+  mutate(across(gdp_at_current_market_prices:add_taxes_on_products, as.numeric))
+
+# Change quarter to date
+sg_gdp <- sg_gdp %>%
+  separate(year, into = c("year", "qtr"), sep = " ") %>% # separate year and quarter
+  mutate(qtr = parse_number(qtr)) %>% # parse number for quarter 
+  mutate(qtr = case_when(
+    qtr == 1 ~ "03-31",
+    qtr == 2 ~ "06-30",
+    qtr == 3 ~ "09-30",
+    qtr == 4 ~ "12-31"
+  ))
+
+sg_gdp <- sg_gdp %>%
+  rowwise() %>%
+  mutate(date = paste0(year, "-", qtr)) %>%
+  mutate(date = as.Date(date)) %>%
+  relocate(date, .before = gdp_at_current_market_prices) %>%
+  select(-c(year, qtr))
+```
+
+```{r}
+## ggplotly plot
+ggplot(sg_gdp) +
+  geom_line(aes(x = date,
+                y = gdp_at_current_market_prices)) 
+```
+
+```{r}
+# Plot few important variables by pivoting longer the important variables
+
+# sg_gdp %>%
+#   pivot_longer(cols = gdp_at_current_market_prices:goods_producing_industries, 
+#                names_to = "varrr",
+#                values_to = "errr")
+```
 
 
-## tables with numerical summary
 
 
 \clearpage

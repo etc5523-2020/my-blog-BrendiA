@@ -1,14 +1,40 @@
-<script src="2020-09-01-covid-19-in-singapore.en_files/htmlwidgets/htmlwidgets.js"></script>
-<link href="2020-09-01-covid-19-in-singapore.en_files/vis/vis.min.css" rel="stylesheet" />
-<script src="2020-09-01-covid-19-in-singapore.en_files/vis/vis.min.js"></script>
-<link href="2020-09-01-covid-19-in-singapore.en_files/timeline/timevis.css" rel="stylesheet" />
-<script src="2020-09-01-covid-19-in-singapore.en_files/timevis-binding/timevis.js"></script>
-<script src="2020-09-01-covid-19-in-singapore.en_files/jquery/jquery.min.js"></script>
+---
+title: A Short Story of COVID-19 in Singapore
+author: Brendi Ang
+date: '2020-09-01'
+slug: covid-19-in-singapore
+categories:
+  - R
+tags:
+  - R Markdown
+  - Academic
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-09-01T22:09:55+10:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+bibliography: [references.bib]
+link-citations: true
+---
+
+<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<link href="/rmarkdown-libs/vis/vis.min.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/vis/vis.min.js"></script>
+<link href="/rmarkdown-libs/timeline/timevis.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/timevis-binding/timevis.js"></script>
+<script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="2020-09-01-covid-19-in-singapore.en_files/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-<script src="2020-09-01-covid-19-in-singapore.en_files/bootstrap/js/bootstrap.min.js"></script>
-<script src="2020-09-01-covid-19-in-singapore.en_files/bootstrap/shim/html5shiv.min.js"></script>
-<script src="2020-09-01-covid-19-in-singapore.en_files/bootstrap/shim/respond.min.js"></script>
+<link href="/rmarkdown-libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/bootstrap/js/bootstrap.min.js"></script>
+<script src="/rmarkdown-libs/bootstrap/shim/html5shiv.min.js"></script>
+<script src="/rmarkdown-libs/bootstrap/shim/respond.min.js"></script>
+<script src="/rmarkdown-libs/pymjs/pym.v1.js"></script>
+<script src="/rmarkdown-libs/widgetframe-binding/widgetframe.js"></script>
 
 
 <p>The Covid-19 pandemic has altered people’s lives, be it enormous or minute. Undoubtedly, there will be many stories told of how they ‘survived’ this pandemic down the road, fighting for toilet papers and masks and how bumping elbows were the norm etc. As a student, I’d like to add that group assignments studying online is a chore when you can’t have face-to-face conversations.</p>
@@ -18,8 +44,9 @@
 <p><code>coronavirus</code> depicts details of coronavirus cases for all countries from 22-01-2020. It is in a long format where each observation represents a detailed summary of COVID-19 cases by country. I’ve chosen to use this data set in conjunction with the <code>merged_df</code> data set the data is in a long format and will be handy when plotting and constructing tables.</p>
 <pre class="r"><code># From coronavirus package: long format of covid cases
 sg_long &lt;- coronavirus %&gt;% 
-  filter(country == &quot;Singapore&quot;) %&gt;%
-  select(-province) # No province in Singapore
+  filter(country == &quot;Singapore&quot;,
+         date != &quot;2020-01-22&quot;) %&gt;% # Show first case recorded onwards
+  select(-c(province, lat, long)) # No province in Singapore
 
 # Load data for all countries
 merged_df &lt;- download_merged_data(cached = TRUE, silent = TRUE) 
@@ -43,21 +70,48 @@ sg_df &lt;- merged_df %&gt;%
       10, &quot;Singapore General Election held&quot;, &quot;2020-07-10&quot;, NA)
  
 timevis(time_vis)</code></pre>
-<div id="htmlwidget-a5099f16d049cca73e88" class="timevis html-widget" style="width:672px;height:480px;">
+<div id="htmlwidget-1" class="timevis html-widget" style="width:672px;height:480px;">
 <div class="btn-group zoom-menu">
 <button type="button" class="btn btn-default btn-lg zoom-in" title="Zoom in">+</button>
 <button type="button" class="btn btn-default btn-lg zoom-out" title="Zoom out">-</button>
 </div>
 </div>
-<script type="application/json" data-for="htmlwidget-a5099f16d049cca73e88">{"x":{"items":[{"id":"1","content":"First Case detected, man from Overseas","start":"2020-01-23"},{"id":"2","content":"First local case","start":"2020-02-04"},{"id":"3","content":"Dorscon level changed (yellow to orange), wave of panic buyers ensued","start":"2020-02-07"},{"id":"4","content":"First death from the virus","start":"2020-03-21"},{"id":"5","content":"Bars, cinemas and entertainment outlet closes","start":"2020-03-26"},{"id":"6","content":"Commencement of first lockdown","start":"2020-04-07","end":"2020-06-01"},{"id":"7","content":"Mandatory mask wearing","start":"2020-04-14"},{"id":"8","content":"Changi Airport Terminal 2 suspends operations for 18 months","start":"2020-04-30"},{"id":"9","content":"End of first lockdown, school reopens","start":"2020-06-01"},{"id":"10","content":"Singapore General Election held","start":"2020-07-10"}],"groups":null,"showZoom":true,"zoomFactor":0.5,"fit":true,"options":[],"height":null,"api":[]},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"items":[{"id":"1","content":"First Case detected, man from Overseas","start":"2020-01-23"},{"id":"2","content":"First local case","start":"2020-02-04"},{"id":"3","content":"Dorscon level changed (yellow to orange), wave of panic buyers ensued","start":"2020-02-07"},{"id":"4","content":"First death from the virus","start":"2020-03-21"},{"id":"5","content":"Bars, cinemas and entertainment outlet closes","start":"2020-03-26"},{"id":"6","content":"Commencement of first lockdown","start":"2020-04-07","end":"2020-06-01"},{"id":"7","content":"Mandatory mask wearing","start":"2020-04-14"},{"id":"8","content":"Changi Airport Terminal 2 suspends operations for 18 months","start":"2020-04-30"},{"id":"9","content":"End of first lockdown, school reopens","start":"2020-06-01"},{"id":"10","content":"Singapore General Election held","start":"2020-07-10"}],"groups":null,"showZoom":true,"zoomFactor":0.5,"fit":true,"options":[],"height":null,"api":[]},"evals":[],"jsHooks":[]}</script>
 <div id="animation-for-covid-cases" class="section level3">
 <h3>Animation for covid cases</h3>
-<pre class="r"><code>sg_long &lt;- sg_long %&gt;%
-  mutate(week_of_year = week(date))
+<pre class="r"><code># Duration of each government intervention 
+sg_long &lt;- sg_long %&gt;%
+  mutate(phase =
+           case_when(
+          between(date, as.Date(&quot;2020-01-22&quot;), as.Date(&quot;2020-04-06&quot;)) ~ &quot;No lockdown&quot;,
+          between(date, as.Date(&quot;2020-04-07&quot;), as.Date(&quot;2020-06-01&quot;)) ~ &quot;First Lockdown&quot;,
+          between(date, as.Date(&quot;2020-06-02&quot;), as.Date(&quot;2020-06-17&quot;)) ~ &quot;Phase 1 (Safe Reopening)&quot;,
+          between(date, as.Date(&quot;2020-06-18&quot;), as.Date(&quot;2020-09-01&quot;)) ~ &quot;Phase 2 (Safe Transition)&quot;)
+         )
 
-p &lt;- ggplot(sg_long) +
+# Compute 3-day Rolling average 
+sg_long &lt;- sg_long %&gt;%
+  group_by(type) %&gt;%
+  # 3-day rolling average
+  mutate(rolling_avg_cases = round(zoo::rollmean(cases, k = 3, fill = 0), digits = 2), 
+         cum_cases = cumsum(cases)) %&gt;% # cumulative cases for each case type
+  relocate(phase, .after = cum_cases)
+
+# daily changes in cases
+sg_long &lt;- sg_long %&gt;%
+  mutate(lag_cases = lag(cum_cases, k = 1)) %&gt;%
+  mutate(daily_prop_change = (cum_cases - lag_cases)/lag_cases)
+
+# Start and end date for each government intervention
+lockdown_dur &lt;- sg_long %&gt;% 
+  group_by(phase) %&gt;%
+  summarise(start = min(date),
+            end = max(date))</code></pre>
+<pre class="r"><code># Static plot: 3-day rolling averages
+p1 &lt;- ggplot(sg_long) +
+  # plot covid cases
   geom_line(aes(x = date,
-                y = cases,
+                y = rolling_avg_cases,
                 colour = type),
             alpha = 0.8) +
   theme_bw() +
@@ -67,20 +121,68 @@ p &lt;- ggplot(sg_long) +
                date_labels = &quot;%b %d&quot;) +
   theme(legend.position = &quot;bottom&quot;,
         axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
-        panel.grid.minor = element_blank()) </code></pre>
-<pre class="r"><code>p + transition_reveal(date) </code></pre>
-<p><img src="2020-09-01-covid-19-in-singapore.en_files/figure-html/animate-cases-1.gif" /><!-- --></p>
+        panel.grid.minor.x = element_blank()) +
+  ggtitle(&quot;Number of confirmed, death and recovered COVID-19 Cases&quot;) +
+  # Colour each phase of government intervention 
+  geom_rect(data = lockdown_dur,
+            aes(xmin = start, 
+                xmax = end,
+                ymin = -Inf, 
+                ymax = Inf,
+                fill = phase),
+            alpha = 0.15)</code></pre>
+<pre class="r"><code># p1 + transition_reveal(date) 
+# Show which lockdown phase the plot is on during animation
+# Show what major events were taking place at this time (e.g. general election or surge in dorm cases)
+# Play and stop button
+# Annotate important dates</code></pre>
 <p>Why so little death? Is it attributed to great hospital equipment? Were there times when hospitals were over capacity?</p>
-<p><em>Observations</em><br />
+<p><em>Key Observations</em><br />
 - People recover in about 2 weeks
 - Very low death rates, almost 0</p>
 </div>
 </div>
 <div id="interactive-table-with-data-story" class="section level2">
 <h2>Interactive table (with data story)</h2>
+<pre class="r"><code># Replace inf, NaN and NA values with zero
+sg_long$daily_prop_change[!is.finite(sg_long$daily_prop_change)] &lt;- 0
+
+# sg_long$daily_prop_change &lt;- scales::percent(round(sg_long$daily_prop_change), digits = 4)
+
+sg_long &lt;- sg_long %&gt;%
+  mutate(daily_prop_change = round(daily_prop_change, digits = 2),
+         daily_prop_change = scales::percent(daily_prop_change))
+
+# Rearrange table
+tb1 &lt;- sg_long %&gt;%
+  select(-c(country, lag_cases)) %&gt;%
+  relocate(phase, .after = daily_prop_change) %&gt;%
+  relocate(rolling_avg_cases, .before = daily_prop_change)</code></pre>
+<pre class="r"><code>tb1_interactive &lt;- DT::datatable(tb1,
+              colnames = c(&#39;Date Recorded&#39;, 
+                           &#39;Case Type&#39;, 
+                           &#39;Number of Cases&#39;,
+                           &#39;Cumulative Cases&#39;,
+                           &#39;3-day Rolling Average Cases&#39;,
+                           &#39;Daily Change in Cases (%)&#39;,
+                           &#39;Phase&#39;
+                           ),
+              filter = &#39;top&#39;,
+              rownames = FALSE,
+              extensions = &quot;Scroller&quot;,
+              options = list(pageLength = 10,
+                             autoWidth = TRUE,
+                             scrollY = &quot;250px&quot;)) %&gt;%
+  formatStyle(c(&#39;daily_prop_change&#39;), `text-align` = &#39;right&#39;) # Align values to the right
+
+        
+# Frame table
+widgetframe::frameWidget(tb1_interactive)</code></pre>
+<div id="htmlwidget-2" style="width:100%;height:480px;" class="widgetframe html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2">{"x":{"url":"/post/covid-sg/2020-09-01-covid-19-in-singapore.en_files/figure-html//widgets/widget_unnamed-chunk-3.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="tables-with-numerical-summary" class="section level2">
-<h2>tables with numerical summary</h2>
+<h2>Tables with numerical summary</h2>
 
 </div>
 <div id="references" class="section level1">
