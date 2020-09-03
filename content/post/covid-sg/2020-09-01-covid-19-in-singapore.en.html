@@ -1,25 +1,88 @@
----
-title: COVID-19 in Singapore
-author: Brendi Ang
-date: '2020-09-01'
-slug: covid-19-in-singapore
-categories:
-  - R
-tags:
-  - R Markdown
-  - Academic
-subtitle: ''
-summary: ''
-authors: []
-lastmod: '2020-09-01T22:09:55+10:00'
-featured: no
-image:
-  caption: ''
-  focal_point: ''
-  preview_only: no
-projects: []
----
+<script src="2020-09-01-covid-19-in-singapore.en_files/htmlwidgets/htmlwidgets.js"></script>
+<link href="2020-09-01-covid-19-in-singapore.en_files/vis/vis.min.css" rel="stylesheet" />
+<script src="2020-09-01-covid-19-in-singapore.en_files/vis/vis.min.js"></script>
+<link href="2020-09-01-covid-19-in-singapore.en_files/timeline/timevis.css" rel="stylesheet" />
+<script src="2020-09-01-covid-19-in-singapore.en_files/timevis-binding/timevis.js"></script>
+<script src="2020-09-01-covid-19-in-singapore.en_files/jquery/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="2020-09-01-covid-19-in-singapore.en_files/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<script src="2020-09-01-covid-19-in-singapore.en_files/bootstrap/js/bootstrap.min.js"></script>
+<script src="2020-09-01-covid-19-in-singapore.en_files/bootstrap/shim/html5shiv.min.js"></script>
+<script src="2020-09-01-covid-19-in-singapore.en_files/bootstrap/shim/respond.min.js"></script>
 
 
+<p>The Covid-19 pandemic has altered people’s lives, be it enormous or minute. Undoubtedly, there will be many stories told of how they ‘survived’ this pandemic down the road, fighting for toilet papers and masks and how bumping elbows were the norm etc. As a student, I’d like to add that group assignments studying online is a chore when you can’t have face-to-face conversations.</p>
+<p>My first blog post is a short story of the COVID-19 situation in my home country, Singapore.</p>
+<div id="data-description" class="section level2">
+<h2>Data Description</h2>
+<p><code>coronavirus</code> depicts details of coronavirus cases for all countries from 22-01-2020. It is in a long format where each observation represents a detailed summary of COVID-19 cases by country. I’ve chosen to use this data set in conjunction with the <code>merged_df</code> data set the data is in a long format and will be handy when plotting and constructing tables.</p>
+<pre class="r"><code># From coronavirus package: long format of covid cases
+sg_long &lt;- coronavirus %&gt;% 
+  filter(country == &quot;Singapore&quot;) %&gt;%
+  select(-province) # No province in Singapore
 
+# Load data for all countries
+merged_df &lt;- download_merged_data(cached = TRUE, silent = TRUE) 
 
+sg_df &lt;- merged_df %&gt;%
+  filter(country == &quot;Singapore&quot;)</code></pre>
+<p>In this blog, three main data sets will be used.</p>
+</div>
+<div id="a-timeline-of-for-covid-19-in-singapore" class="section level2">
+<h2>A Timeline of for Covid-19 in Singapore</h2>
+<pre class="r"><code>time_vis &lt;- tribble (~id, ~content, ~start, ~end,
+      1, &quot;First Case detected, man from Overseas&quot;, &quot;2020-01-23&quot;, NA, 
+      2, &quot;First local case&quot;, &quot;2020-02-04&quot;, NA, 
+      3, &quot;Dorscon level changed (yellow to orange), wave of panic buyers ensued&quot;, &quot;2020-02-07&quot;, NA, 
+      4, &quot;First death from the virus&quot;, &quot;2020-03-21&quot;, NA, 
+      5, &quot;Bars, cinemas and entertainment outlet closes&quot;, &quot;2020-03-26&quot;, NA,
+      6, &quot;Commencement of first lockdown&quot;, &quot;2020-04-07&quot;, &quot;2020-06-01&quot;,
+      7, &quot;Mandatory mask wearing&quot;, &quot;2020-04-14&quot;, NA,
+      8, &quot;Changi Airport Terminal 2 suspends operations for 18 months&quot;, &quot;2020-04-30&quot;, NA,
+      9, &quot;End of first lockdown, school reopens&quot;, &quot;2020-06-01&quot;, NA,
+      10, &quot;Singapore General Election held&quot;, &quot;2020-07-10&quot;, NA)
+ 
+timevis(time_vis)</code></pre>
+<div id="htmlwidget-a5099f16d049cca73e88" class="timevis html-widget" style="width:672px;height:480px;">
+<div class="btn-group zoom-menu">
+<button type="button" class="btn btn-default btn-lg zoom-in" title="Zoom in">+</button>
+<button type="button" class="btn btn-default btn-lg zoom-out" title="Zoom out">-</button>
+</div>
+</div>
+<script type="application/json" data-for="htmlwidget-a5099f16d049cca73e88">{"x":{"items":[{"id":"1","content":"First Case detected, man from Overseas","start":"2020-01-23"},{"id":"2","content":"First local case","start":"2020-02-04"},{"id":"3","content":"Dorscon level changed (yellow to orange), wave of panic buyers ensued","start":"2020-02-07"},{"id":"4","content":"First death from the virus","start":"2020-03-21"},{"id":"5","content":"Bars, cinemas and entertainment outlet closes","start":"2020-03-26"},{"id":"6","content":"Commencement of first lockdown","start":"2020-04-07","end":"2020-06-01"},{"id":"7","content":"Mandatory mask wearing","start":"2020-04-14"},{"id":"8","content":"Changi Airport Terminal 2 suspends operations for 18 months","start":"2020-04-30"},{"id":"9","content":"End of first lockdown, school reopens","start":"2020-06-01"},{"id":"10","content":"Singapore General Election held","start":"2020-07-10"}],"groups":null,"showZoom":true,"zoomFactor":0.5,"fit":true,"options":[],"height":null,"api":[]},"evals":[],"jsHooks":[]}</script>
+<div id="animation-for-covid-cases" class="section level3">
+<h3>Animation for covid cases</h3>
+<pre class="r"><code>sg_long &lt;- sg_long %&gt;%
+  mutate(week_of_year = week(date))
+
+p &lt;- ggplot(sg_long) +
+  geom_line(aes(x = date,
+                y = cases,
+                colour = type),
+            alpha = 0.8) +
+  theme_bw() +
+  scale_colour_manual(values = c(&quot;#bc3a3a&quot;, &quot;#00468b&quot; ,&quot;#468b00&quot;)) +
+  theme(legend.position = &quot;bottom&quot;) +
+  scale_x_date(date_breaks = &quot;1 week&quot;, 
+               date_labels = &quot;%b %d&quot;) +
+  theme(legend.position = &quot;bottom&quot;,
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        panel.grid.minor = element_blank()) </code></pre>
+<pre class="r"><code>p + transition_reveal(date) </code></pre>
+<p><img src="2020-09-01-covid-19-in-singapore.en_files/figure-html/animate-cases-1.gif" /><!-- --></p>
+<p>Why so little death? Is it attributed to great hospital equipment? Were there times when hospitals were over capacity?</p>
+<p><em>Observations</em><br />
+- People recover in about 2 weeks
+- Very low death rates, almost 0</p>
+</div>
+</div>
+<div id="interactive-table-with-data-story" class="section level2">
+<h2>Interactive table (with data story)</h2>
+</div>
+<div id="tables-with-numerical-summary" class="section level2">
+<h2>tables with numerical summary</h2>
+
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+</div>
