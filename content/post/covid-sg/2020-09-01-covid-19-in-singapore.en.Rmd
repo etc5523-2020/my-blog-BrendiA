@@ -261,22 +261,31 @@ sg_gdp <- sg_gdp %>%
   select(-c(year, qtr))
 ```
 
-```{r}
-## ggplotly plot
-ggplot(sg_gdp) +
-  geom_line(aes(x = date,
-                y = gdp_at_current_market_prices)) 
+
+
+
+```{r gdp-long }
+# Show GDP growth change for each industry
+
+# Create subgroups for the sectors
+sg_gdp_long <- sg_gdp %>%
+  pivot_longer(cols = manufacturing:ownership_of_dwellings,
+               names_to = "gdp_goods_services",
+               values_to = "values_goods_services") %>%
+  # Categorise each sector according to their respective industry
+  mutate(industry = case_when(
+    gdp_goods_services %in% c("manufacturing", "construction", "utilities", "other_goods_industries") ~ "goods",
+    gdp_goods_services %in% "ownership_of_dwellings" ~ "ownership",
+    TRUE ~ "services")
+    )
+
+# Compute GDP before taxes, to be consistent with sectors           
+sg_gdp_long <- sg_gdp_long %>%
+  mutate(gdp_at_current_market_prices = gdp_at_current_market_prices - add_taxes_on_products) %>%
+  select(-c(add_taxes_on_products, gross_value_added_at_basic_prices))
 ```
 
-```{r}
-# Plot few important variables by pivoting longer the important variables
-
-# sg_gdp %>%
-#   pivot_longer(cols = gdp_at_current_market_prices:goods_producing_industries, 
-#                names_to = "varrr",
-#                values_to = "errr")
-```
-
+## interactive table
 
 
 
