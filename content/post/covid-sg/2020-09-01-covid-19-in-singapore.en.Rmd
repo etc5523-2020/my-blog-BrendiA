@@ -29,12 +29,9 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, echo = FALS
 library(tidyverse)
 library(coronavirus) # devtools::install_github("RamiKrispin/coronavirus")
 library(DT)
-library(gganimate)
 library(janitor)
 library(lubridate)
 library(plotly)
-library(tidycovid19) # remotes::install_github("joachim-gassen/tidycovid19")
-library(transformr)
 library(readxl)
 library(stringr)
 library(timevis)
@@ -43,13 +40,22 @@ library(zoo)
 library(scales)
 ```
 
-The Covid-19 pandemic has altered people's lives, be it enormous or minute. Undoubtedly, there will be many stories told of how they 'survived' this pandemic down the road, fighting for toilet papers and masks and how bumping elbows were the norm etc. As a student, I'd like to add that group assignments studying online is a chore when you can't have face-to-face conversations. 
+Undoubtedly, The COVID-19 pandemic will have altered personal lives, be it enormous or minor. There will be many stories told of how they 'survived' this pandemic down the road, having to fight for toilet papers and socially distancing from people outside. As a student, I'd like to add that group assignments studying online is a chore when you can't have face-to-face conversations. 
 
-My first blog post is a short story of the COVID-19 situation in my home country, Singapore.
+When I think about the detrimental implications of COVID-19, jobs and economy come to my mind. In Singapore, this pandemic has caused significant downturns for major industries, resulting to an the unemployment rate of 2.9% (@sgjobs), an all-time high since the global financial crisis.
 
-## Data Description 
+My first blog post will feature a short story of the COVID-19 situation in my home country, Singapore. I will first study the trends in COVID-19 cases in Singapore, where I will break down the observations into 4 distinct components relating to the lockdown restrictions. Next, I will investigate the broad economical impact of COVID-19 on the different sectors of Singapore's economy. Notably, I included an interactive table for both of these sections as I thought it can be used in conjunction with figures to articulate the findings better.
 
-`coronavirus` depicts details of coronavirus cases for all countries from 22-01-2020. It is in a long format where each observation represents a detailed summary of COVID-19 cases by country. I've chosen to use this data set in conjunction with the `merged_df` data set the data is in a long format and will be handy when plotting and constructing tables.
+## Getting the Data
+
+To analyse the COVID-19 cases, I extracted the daily summary of Singapore's COVID-19 cases in the `coronavirus` package. This package contains the raw data in a tidy format, summarising the daily cases by state/province and is readily available on [GitHub](https://github.com/RamiKrispin/coronavirus). Each observation represents the total number of cases recorded in the state/province, where each cases are identified by their case type, spanning from 2020-01-23. It was really convenient to use this data set as minimal data wrangling had to be done.
+
+The main variables that were utilised from the data set were:  
+- `date`: Date in YYYY-MM-DD format
+- `type`: Type of cases (confirmed, death or recovered)
+- `cases`: Number of cases on a given date  
+
+Next, to study the economical impact of COVID-19, I download the quarterly Gross Domestic Product(GDP) at Current Prices" from the [Department of Statistics Singapore website](https://www.tablebuilder.singstat.gov.sg/publicfacing/createDataTable.action?refId=16059) (@sggdp). In terms of the data cleaning process, the data was transposed before I removed unnecessary variables and renamed variables names such that they are consistent and comprising of only characters, numbers, lower case letters, with spaces denoted with underscores.
 
 ```{r read-in-data}
 # From coronavirus package: long format of covid cases
@@ -57,12 +63,6 @@ sg_long <- coronavirus %>%
   filter(country == "Singapore",
          date != "2020-01-22") %>% # Show first case recorded onwards
   select(-c(province, lat, long)) # No province in Singapore
-
-# Load data for all countries
-merged_df <- download_merged_data(cached = TRUE, silent = TRUE) 
-
-sg_df <- merged_df %>%
-  filter(country == "Singapore")
 ```
 
 ```{r wrangle-gdp, include = FALSE}
@@ -85,32 +85,9 @@ sg_gdp <- sg_gdp %>% #
 sg_gdp <- sg_gdp %>%
   rownames_to_column('Year') %>%
   janitor::clean_names() # Remove spacings in variable names
-
 ```
 
-In this blog, three main data sets will be used.
-
-
-## A Timeline of for Covid-19 in Singapore
-
-```{r, outwidth = 12}
-time_vis <- tribble (~id, ~content, ~start, ~end,
-      1, "First Case detected, man from Overseas", "2020-01-23", NA, 
-      2, "First local case", "2020-02-04", NA, 
-      3, "Dorscon level changed (yellow to orange), wave of panic buyers ensued", "2020-02-07", NA, 
-      4, "First death from the virus", "2020-03-21", NA, 
-      5, "Bars, cinemas and entertainment outlet closes", "2020-03-26", NA,
-      6, "Commencement of first lockdown", "2020-04-07", "2020-06-01",
-      7, "Mandatory mask wearing", "2020-04-14", NA,
-      8, "Changi Airport Terminal 2 suspends operations for 18 months", "2020-04-30", NA,
-      9, "End of first lockdown, school reopens", "2020-06-01", NA,
-      10, "Singapore General Election held", "2020-07-10", NA)
- 
-timevis(time_vis)
-```
-
-
-### Animation for covid cases
+### COVID-19 Cases in Singapore
 
 ```{r sg-phases}
 # Duration of each government intervention 
@@ -143,9 +120,9 @@ lockdown_dur <- sg_long %>%
             end = max(date))
 ```
 
-```{r static-cases}
+```{r static-cases, fig.height = 8, fig.align = 'left'}
 # Static plot: 3-day rolling averages
-p1 <- ggplot(sg_long) +
+ggplot(sg_long) +
   # plot covid cases
   geom_line(aes(x = date,
                 y = rolling_avg_cases,
@@ -159,34 +136,33 @@ p1 <- ggplot(sg_long) +
   theme(legend.position = "bottom",
         axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
         panel.grid.minor.x = element_blank()) +
-  ggtitle("Number of confirmed, death and recovered COVID-19 Cases") +
   # Colour each phase of government intervention 
   geom_rect(data = lockdown_dur,
             aes(xmin = start, 
                 xmax = end,
-                ymin = -Inf, 
-                ymax = Inf,
+                ymin = 0, 
+                ymax = 1500,
                 fill = phase),
             alpha = 0.15) +
-  scale_fill_manual(values = c('#c74848', '#228b57', '#72bcd4', '#a284e0'))
+  ggtitle("Number of confirmed, death and recovered COVID-19 Cases") +
+  scale_fill_manual(values = c('#c74848', '#228b57', '#72bcd4', '#a284e0')) +
+  theme(legend.position = "bottom",
+        legend.direction = "vertical")
 ```
 
-```{r animate-cases}
-# p1 + transition_reveal(date)
-# Show which lockdown phase the plot is on during animation
-# Show what major events were taking place at this time (e.g. general election or surge in dorm cases)
-# Play and stop button
-# Annotate important dates
-```
+The figure displays the number of new cases in Singapore daily by each case type. The the x-axis represents each date while the y-axis shows the number of new cases on a given day. To investigate the trends further, I have broken down the dates into four components, each representing the lockdown phase.
 
-Why so little death? Is it attributed to great hospital equipment? Were there times when hospitals were over capacity?
+A marked escalation of new COVID-19 cases can be observed in early April, where the first lockdown was implemented, 7 April (*reference*). At a glance, it seems that Singapore was rather too late in tightening its restrictions and this could be avoided. Based on the *table reference*, Singapore's cases increased by a staggering `r ((1136.61-94.41)/94.41)*100`% from the first week to the last week of April although lockdown and social distancing protocols were in effect. 
 
-*Key Observations*  
-- People recover in about 2 weeks
-- Very low death rates, almost 0 
+Upon further investigation, this increase can be attributed to the surge in infections among migrant worker population staying in dormitories (@sgdorm). The impact of COVID-19 revealed that thousands of low-skilled migrant workers in Singapore lived in poor housing conditions. For instance, many migrant workers had "20 people sharing a single room" (@sgdorm2) where social distancing was too difficult to practice. In a pandemic, these living environment could serve as flash points for a further spread, as seen in the figure (@Koh634). As of 6 May, there were 17,758 confirmed COVID-19 cases among dormitory workers (approximately 90% of 20,000 nationally confirmed cases) (@Koh634). 
 
+Although the confirmed cases were higher in Singapore, the fatality rate of COVID-19 cases were insignificant as compared to the new cases, staying relatively constant at 0. Is it a matter of chance where the people who were infected were healthy? At first, studies indicated that this coincidence may be due to the prevalence of testing as the Singapore's screening program comprises of young and even asymptotic people (@sgdeaths). Of course, the efforts of first line workers should never downplayed; And these assertions were quickly invalidated as research proved that salient factors other other than patient characteristics that determine Covid-19 mortality, such as government response are more prominent (liang2020covid). 
 
-## Interactive table (with data story)
+At the heart of Singapore’s operational capacity is its healthcare system, ranked among the top in the world, the healthcare system has been described as ‘high quality, low cost’. In 2019 itself,The National Centre for Infectious diseases (NCID) installed bed purpose built facility that were designed to manage an outbreak on the scale of SARS, allowing for excess capacity of patients (liang2020covid). 
+
+Not to mention, the government was largely successful in contact tracing, and instilled a hefty penalty for the defiance of lockdown restrictions - fined up to $9,500 and/or up to six months of imprisonment. Therefore, the gradual decrease in the number of cases as seen on the figure may be a results of these stringent lockdown restrictions.
+
+## Interactive table: Covid-19 Cases in Singapore
 
 ```{r}
 # Replace inf, NaN and NA values with zero
@@ -236,8 +212,6 @@ widgetframe::frameWidget(tb1_interactive)
 
 
 ## COVID-19 impact on Singapore's economy
-
-Undoubtedly, COVID-19 would have impact on Singapore's Economy. In this section, we will investigate which sector are most adversely affected by the outbreak.
 
 ```{r wrangle-sgp-gdp}
 # Convert character variables to numeric
@@ -299,17 +273,6 @@ ind_summary <- sg_gdp_long %>%
   # Quarter of each year
   mutate(qtr = month/3) %>%
   select(-month)
-  
-p2 <- ind_summary %>% 
-  # filter(qtr == c(2,4)) %>% # show biannual trend to smooth graph
-  ggplot(aes(x = date, 
-             y = total)) +
-  geom_line(aes(colour = industry)) +
-  ggtitle("Quarterly GDP Values for each Industry") +
-  theme_bw() +
-  theme(legend.position = "bottom") 
-
-p2
 ```
 
 ```{r}
@@ -338,8 +301,14 @@ p3 <- ggplot(ind_change) +
 p3
 ```
 
+As we understand the COVID-19 situation in Singapore better, we delve into investigating which sector are most adversely affected by the pandemic.
+
 ```{r}
 p4 <- sg_gdp_long %>%
+  # Replace '_' with a space
+  mutate(Sector = str_replace_all(Sector, "[[:punct:]]", " ")) %>%
+  # Capitalise first letter of each word
+  mutate(Sector = str_to_title(Sector)) %>%
   ggplot() +
   geom_line(aes(x = date,
                 y = Sector_GDP,
@@ -349,7 +318,8 @@ p4 <- sg_gdp_long %>%
                 text = paste('Date:', date,
                              '<br>Sector:', Sector, 
                              '<br>Sector GDP:', Sector_GDP
-                ))) +
+                )),
+            alpha = 0.6) +
   theme(legend.position = "none") +
   facet_wrap(~ industry,
              nrow = 3,
@@ -360,7 +330,7 @@ plotly::ggplotly(p4,
                  tooltip = "text")
 ```
 
-## interactive table
+## Interactive Table: GDP Trends
 
 ```{r tb2-wrangle}
 tb2 <- sg_gdp_long %>%
@@ -432,9 +402,7 @@ tb2_interactive <- DT::datatable(tb2,
               rownames = FALSE,
               extensions = c("Scroller", 
                              "FixedColumns"), # Make columns visible when scrolling
-              options = list(pageLength = 10,
-                             dom = 't',
-                             autoWidth = TRUE,
+              options = list(pageLength = 15,
                              scrollY = "200px",
                              scrollX = TRUE)) %>%
   # Format proportion to percentage
