@@ -2,6 +2,9 @@
 bio: A current student of the master of business analytics at Monash University.
 education:
   courses:
+  - course: Master of Business Analytics
+    institution: Monash University
+    year: 2020 - Present
   - course: BSc in Accounting and Finance
     institution: University of Melbourne
     year: 2019
@@ -19,5 +22,4 @@ title: Brendi Ang
 user_groups:
 - Principal Investigators
 ---
-
 
