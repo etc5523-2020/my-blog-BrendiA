@@ -23,7 +23,7 @@ link-citations: true
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, echo = FALSE)
 
 # Load library
 library(tidyverse)
@@ -32,9 +32,11 @@ library(DT)
 library(gganimate)
 library(janitor)
 library(lubridate)
+library(plotly)
 library(tidycovid19) # remotes::install_github("joachim-gassen/tidycovid19")
 library(transformr)
 library(readxl)
+library(stringr)
 library(timevis)
 library(widgetframe)
 library(zoo)
@@ -261,33 +263,187 @@ sg_gdp <- sg_gdp %>%
   select(-c(year, qtr))
 ```
 
-
-
-
-```{r gdp-long }
-# Show GDP growth change for each industry
+```{r gdp-long}
+# Convert GDP dataset to long format for plotting
 
 # Create subgroups for the sectors
 sg_gdp_long <- sg_gdp %>%
+  # Keep aggregated scores together so it doesn't get 'pivoted'
+  relocate(services_producing_industries, .before = manufacturing) %>% 
   pivot_longer(cols = manufacturing:ownership_of_dwellings,
-               names_to = "gdp_goods_services",
-               values_to = "values_goods_services") %>%
+               names_to = "Sector",
+               values_to = "Sector_GDP") %>%
   # Categorise each sector according to their respective industry
   mutate(industry = case_when(
-    gdp_goods_services %in% c("manufacturing", "construction", "utilities", "other_goods_industries") ~ "goods",
-    gdp_goods_services %in% "ownership_of_dwellings" ~ "ownership",
+    Sector %in% c("manufacturing", "construction", "utilities", "other_goods_industries") ~ "goods",
+    Sector %in% "ownership_of_dwellings" ~ "ownership",
     TRUE ~ "services")
-    )
+    ) %>%
+  # Capitalise first words of character string
+  mutate(industry = str_to_title(industry),
+         Sector = str_to_title(Sector)) 
 
 # Compute GDP before taxes, to be consistent with sectors           
 sg_gdp_long <- sg_gdp_long %>%
   mutate(gdp_at_current_market_prices = gdp_at_current_market_prices - add_taxes_on_products) %>%
-  select(-c(add_taxes_on_products, gross_value_added_at_basic_prices))
+  select(-c(add_taxes_on_products, gross_value_added_at_basic_prices)) %>%
+  mutate(across(where(is.character), as.factor)) # Convert character strings to factor
+```
+
+```{r}
+# Compute summary statistics at industry level
+ind_summary <- sg_gdp_long %>%
+  group_by(date, industry) %>%
+  summarise(total = sum(Sector_GDP)) %>%
+  mutate(month = month(date)) %>%
+  # Quarter of each year
+  mutate(qtr = month/3) %>%
+  select(-month)
+  
+p2 <- ind_summary %>% 
+  # filter(qtr == c(2,4)) %>% # show biannual trend to smooth graph
+  ggplot(aes(x = date, 
+             y = total)) +
+  geom_line(aes(colour = industry)) +
+  ggtitle("Quarterly GDP Values for each Industry") +
+  theme_bw() +
+  theme(legend.position = "bottom") 
+
+p2
+```
+
+```{r}
+# Find relative change of GDP for each industry per year
+ind_change <- ind_summary %>%
+  group_by(industry) %>%
+  mutate(lag_total = lag(total, k = 1)) %>%
+  mutate(pct_change = round((total-lag_total)/lag_total*100, digits = 4)
+  ) 
+
+p3 <- ggplot(ind_change) +
+  geom_line(aes(x = date,
+                y = pct_change,
+                colour = industry),
+            alpha = 0.8) +
+  geom_hline(aes(yintercept = 0),
+             alpha = 0.2) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  facet_wrap(~ industry,
+             ncol = 1,
+             strip.position = "top") +
+  labs(y = "Quarterly change in GDP (%) for each Industry",
+       x = "Date")
+
+p3
+```
+
+```{r}
+p4 <- sg_gdp_long %>%
+  ggplot() +
+  geom_line(aes(x = date,
+                y = Sector_GDP,
+                colour = Sector,
+                group = 1,
+                # Format legend name for plotly
+                text = paste('Date:', date,
+                             '<br>Sector:', Sector, 
+                             '<br>Sector GDP:', Sector_GDP
+                ))) +
+  theme(legend.position = "none") +
+  facet_wrap(~ industry,
+             nrow = 3,
+             scales = "free_y") +
+  ggtitle("Quartely GDP values for each Sector")
+
+plotly::ggplotly(p4,
+                 tooltip = "text")
 ```
 
 ## interactive table
 
+```{r tb2-wrangle}
+tb2 <- sg_gdp_long %>%
+  # Remove all '_' 
+  mutate(Sector = str_replace_all(Sector, "[[:punct:]]", " ")) %>%
+  mutate(Sector = str_to_title(Sector)) %>%
+  arrange(Sector)
 
+# Take subset of industrial GDP changes
+## Join for quarterly GDP changes for industry
+
+
+tb2 <- tb2 %>%
+  inner_join(ind_summary, by = c("date", "industry")) %>%
+  rename(industry_total = total) %>%
+  select(-qtr)
+
+# Set year to year-quarter variable - Better for eyes
+tb2$date <- zoo::as.yearqtr(tb2$date, format = "%Y-%m-%d")
+
+# Rearrange table
+tb2 <- tb2 %>%
+  select(date, 
+         Sector, 
+         Sector_GDP, 
+         industry, 
+         goods_producing_industries,
+         services_producing_industries,
+         gdp_at_current_market_prices
+         )
+
+# add relative changes in sector and industry 
+tb2 <- tb2 %>%
+  group_by(Sector) %>%
+  mutate(lag_sector_GDP = lag(Sector_GDP, k =1)) %>%
+  ungroup() %>%
+  group_by(industry) %>%
+  mutate(lag_industry_GDP = lag(gdp_at_current_market_prices, k =1))  %>%
+  mutate(sector_GDP_change = round((Sector_GDP - lag_sector_GDP)/lag_sector_GDP, digits = 4), 
+         industry_GDP_change = round((gdp_at_current_market_prices - lag_industry_GDP)/lag_industry_GDP, digits = 4)) %>%
+  select(-c(lag_sector_GDP,
+            lag_industry_GDP)) %>%
+  relocate(sector_GDP_change, .before = industry) %>%
+  relocate(industry, .before = Sector_GDP) %>%
+  rename(total_GDP = gdp_at_current_market_prices)
+
+# Replace inf, NaN and NA values with zero
+tb2$sector_GDP_change[!is.finite(tb2$sector_GDP_change)] <- 0
+tb2$industry_GDP_change[!is.finite(tb2$industry_GDP_change)] <- 0
+
+# Convert date to character to allow DT::datatable to read
+tb2 <- tb2 %>%
+  mutate(date = as.character(date))
+```
+
+```{r}
+tb2_interactive <- DT::datatable(tb2,
+              colnames = c('Date Recorded', 
+                           'Sector', 
+                           'Sector\'s Industry',
+                           'Sector\'s GDP',
+                           'Sector\'s Quarterly GDP Change',
+                           'Goods Industry\'s GDP',
+                           'Services Industry\'s GDP',
+                           'Total GDP',
+                           'Industry\'s Quarterly GDP Change'
+                           ),
+              filter = 'top',
+              rownames = FALSE,
+              extensions = c("Scroller", 
+                             "FixedColumns"), # Make columns visible when scrolling
+              options = list(pageLength = 10,
+                             dom = 't',
+                             autoWidth = TRUE,
+                             scrollY = "200px",
+                             scrollX = TRUE)) %>%
+  # Format proportion to percentage
+  formatPercentage(c('sector_GDP_change', 'industry_GDP_change'), 
+                   digits = 2) 
+
+# Frame table
+widgetframe::frameWidget(tb2_interactive)
+```
 
 \clearpage
 
