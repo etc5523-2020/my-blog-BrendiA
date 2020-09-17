@@ -1,0 +1,158 @@
+---
+title: A short Story of COVID-19 in South Africa
+author: Brendi Ang
+date: '2020-09-17'
+slug: a-short-story-of-covid-19-in-south-africa
+categories:
+  - R
+tags:
+  - R Markdown
+  - Academic
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-09-17T01:32:24+10:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, echo = FALSE, fig.height = 7.5, fig.width = 6)
+
+# Load library
+library(tidyverse)
+library(coronavirus) # devtools::install_github("RamiKrispin/coronavirus")
+library(rnaturalearth) # devtools::install_github("ropenscilabs/rnaturalearth")
+library(stringr)
+library(janitor)
+```
+
+# Getting the Data
+
+```{r province-data}
+# Cumulative confirmed cases by province
+prov_confirmed <- readr::read_csv("https://raw.githubusercontent.com/dsfsi/covid19za/master/data/covid19za_provincial_cumulative_timeline_confirmed.csv")
+
+# Cumulative death cases by province
+prov_deaths <- readr::read_csv("https://raw.githubusercontent.com/dsfsi/covid19za/master/data/covid19za_provincial_cumulative_timeline_deaths.csv")
+
+# Cumulative recovered cases by province
+prov_recovered <- readr::read_csv("https://raw.githubusercontent.com/dsfsi/covid19za/master/data/covid19za_provincial_cumulative_timeline_recoveries.csv")
+
+# Provincial Population Estimates
+prov_popests <- readr::read_csv("https://raw.githubusercontent.com/dsfsi/covid19za/master/data/official_stats/statssa_population_midyear_provincially_2019.csv_") 
+```
+
+```{r clean-province-population}
+# Clean provincial population estimates data
+prov_popests <- prov_popests %>%
+  # Remove spaces in variables
+  janitor::clean_names() %>%
+  # convert character strings to lower case
+  mutate(province = tolower(province)) %>%
+  # Replace spaces and dashes with "_"
+  mutate(province = str_replace(province, " ", "_"),
+         province = str_replace(province, "-", "_"))
+```
+
+```{r clean-province-cases}
+# Cleaning function for provincial cases, converts df to long format
+clean_prov <- function(df, case_type) {
+  df %>%
+  rename(eastern_cape = EC,
+         free_state = FS,
+         gauteng = GP,
+         kwazulu_natal = KZN,
+         limpopo = LP,
+         mpumalanga = MP,
+         northern_cape = NC,
+         north_west = NW,
+         western_cape = WC) %>%
+  mutate(date = as.Date(date, format = "%d-%m-%Y")) %>%
+  select(-c(UNKNOWN, source, YYYYMMDD)) %>%
+    pivot_longer(cols = eastern_cape:western_cape,
+                 names_to = "province",
+                 values_to = case_type) %>%
+    relocate(total, .after = case_type) 
+  
+}
+
+# Clean data frames
+prov_confirmed <- clean_prov(prov_confirmed, "confirmed")
+prov_deaths <- clean_prov(prov_deaths, "deaths")
+prov_recovered <- clean_prov(prov_recovered, "recovered")
+
+# Change total to total based on case_type
+names(prov_confirmed)[4] <- paste0("total_", "confirmed")
+names(prov_deaths)[4] <- paste0("total_", "deaths")
+names(prov_recovered)[4] <- paste0("total_", "recovered")
+```
+
+```{r join-province}
+# Join all province data
+prov_all <-
+  full_join(prov_confirmed, prov_deaths, by = c("province", "date")) %>%
+  full_join(prov_recovered, by = c("province", "date")) 
+
+
+# Convert to long format for plotting
+prov_all_long <- prov_all %>%
+  pivot_longer(cols = c(confirmed, deaths, recovered),
+               names_to = "type",
+               values_to = "cases") %>%
+  pivot_longer(cols = total_confirmed:total_recovered,
+               names_to = "type_total",
+               values_to = "cases_total")
+
+prov_all_long <- prov_all_long %>%
+  left_join(prov_popests, by = "province")
+```
+
+
+```{r}
+prov_all_long %>%
+ggplot() +
+  geom_line(aes(x = date,
+                 y = cases, 
+                 colour = type)) +
+  facet_wrap(~ province,
+             scales = "free_y")
+```
+
+
+# Introduction
+
+```{r}
+coronavirus %>%
+  filter(type == "confirmed") %>%
+  group_by(country) %>%
+  summarise(confirmed_cases = sum(cases)) %>%
+  top_n(10)
+```
+- As of today, South Africa remains top 10 country with most confirmed cases
+- How many third world country are there in this list?
+
+# COVID-19 Cases in Singapore
+
+## Getting the Data
+
+```{r read-in-data}
+# From coronavirus package: long format of covid cases
+covid_SA <- coronavirus %>% 
+  filter(country == "South Africa",
+         date >= "2020-03-05") # Show data from first case recorded onwards
+```
+
+```{r}
+covid_SA %>%
+  ggplot() +
+  geom_line(aes(x = date,
+                y = cases,
+                colour = type)) +
+  theme(legend.position = "bottom")
+```
+

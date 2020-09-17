@@ -5,12 +5,69 @@
     <link>/tag/r-markdown/</link>
       <atom:link href="/tag/r-markdown/index.xml" rel="self" type="application/rss+xml" />
     <description>R Markdown</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Tue, 01 Sep 2020 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Thu, 17 Sep 2020 00:00:00 +0000</lastBuildDate>
     <image>
       <url>/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_2.png</url>
       <title>R Markdown</title>
       <link>/tag/r-markdown/</link>
     </image>
+    
+    <item>
+      <title>A short Story of COVID-19 in South Africa</title>
+      <link>/post/covid-sa/a-short-story-of-covid-19-in-south-africa/</link>
+      <pubDate>Thu, 17 Sep 2020 00:00:00 +0000</pubDate>
+      <guid>/post/covid-sa/a-short-story-of-covid-19-in-south-africa/</guid>
+      <description>
+
+
+&lt;div id=&#34;getting-the-data&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Getting the Data&lt;/h1&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 192 x 14
+##    date  YYYYMMDD eastern_cape free_state gauteng kwazulu_natal limpopo
+##    &amp;lt;chr&amp;gt;    &amp;lt;dbl&amp;gt;        &amp;lt;dbl&amp;gt;      &amp;lt;dbl&amp;gt;   &amp;lt;dbl&amp;gt;         &amp;lt;dbl&amp;gt;   &amp;lt;dbl&amp;gt;
+##  1 05-0… 20200305            0          0       0             1       0
+##  2 07-0… 20200307            0          0       1             1       0
+##  3 08-0… 20200308            0          0       1             2       0
+##  4 09-0… 20200309            0          0       1             6       0
+##  5 11-0… 20200311            0          0       5             7       0
+##  6 12-0… 20200312            0          0       6             8       0
+##  7 13-0… 20200313            0          0      10            10       0
+##  8 14-0… 20200314            0          0      17            11       0
+##  9 15-0… 20200315            0          0      24            12       0
+## 10 16-0… 20200316            0          0      31            12       1
+## # … with 182 more rows, and 7 more variables: mpumalanga &amp;lt;dbl&amp;gt;,
+## #   northern_cape &amp;lt;dbl&amp;gt;, north_west &amp;lt;dbl&amp;gt;, wester_cape &amp;lt;dbl&amp;gt;, UNKNOWN &amp;lt;dbl&amp;gt;,
+## #   total &amp;lt;dbl&amp;gt;, source &amp;lt;chr&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 10 x 2
+##    country      confirmed_cases
+##    &amp;lt;chr&amp;gt;                  &amp;lt;int&amp;gt;
+##  1 Argentina             417735
+##  2 Brazil               3908272
+##  3 Colombia              615094
+##  4 India                3691166
+##  5 Mexico                599560
+##  6 Peru                  647166
+##  7 Russia                992402
+##  8 South Africa          627041
+##  9 Spain                 462858
+## 10 US                   6030587&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;As of today, South Africa remains top 10 country with most confirmed cases&lt;/li&gt;
+&lt;li&gt;How many third world country are there in this list?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;covid-19-cases-in-singapore&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;COVID-19 Cases in Singapore&lt;/h1&gt;
+&lt;div id=&#34;getting-the-data-1&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Getting the Data&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;/post/Covid-SA/2020-09-17-a-short-story-of-covid-19-in-south-africa.en_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;576&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>A Short Story of COVID-19 in Singapore</title>
