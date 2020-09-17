@@ -29,6 +29,8 @@ library(coronavirus) # devtools::install_github("RamiKrispin/coronavirus")
 library(rnaturalearth) # devtools::install_github("ropenscilabs/rnaturalearth")
 library(stringr)
 library(janitor)
+library(crosstalk)
+library(plotly)
 ```
 
 # Getting the Data
@@ -56,7 +58,9 @@ prov_popests <- prov_popests %>%
   mutate(province = tolower(province)) %>%
   # Replace spaces and dashes with "_"
   mutate(province = str_replace(province, " ", "_"),
-         province = str_replace(province, "-", "_"))
+         province = str_replace(province, "-", "_")) %>%
+  rename(pop_ests = population_estimate,
+         prop_of_total = percent_of_total_population)
 ```
 
 ```{r clean-province-cases}
@@ -73,12 +77,13 @@ clean_prov <- function(df, case_type) {
          north_west = NW,
          western_cape = WC) %>%
   mutate(date = as.Date(date, format = "%d-%m-%Y")) %>%
-  select(-c(UNKNOWN, source, YYYYMMDD)) %>%
+  select(-c(UNKNOWN, 
+            source, 
+            YYYYMMDD, 
+            total)) %>% # Will use coronavirus package for total cases
     pivot_longer(cols = eastern_cape:western_cape,
                  names_to = "province",
-                 values_to = case_type) %>%
-    relocate(total, .after = case_type) 
-  
+                 values_to = case_type) 
 }
 
 # Clean data frames
@@ -94,7 +99,7 @@ names(prov_recovered)[4] <- paste0("total_", "recovered")
 
 ```{r join-province}
 # Join all province data
-prov_all <-
+prov_all <- 
   full_join(prov_confirmed, prov_deaths, by = c("province", "date")) %>%
   full_join(prov_recovered, by = c("province", "date")) 
 
@@ -104,23 +109,17 @@ prov_all_long <- prov_all %>%
   pivot_longer(cols = c(confirmed, deaths, recovered),
                names_to = "type",
                values_to = "cases") %>%
-  pivot_longer(cols = total_confirmed:total_recovered,
-               names_to = "type_total",
-               values_to = "cases_total")
+  # Replace NAs with 0
+  mutate(cases = replace_na(cases, 0))
 
 prov_all_long <- prov_all_long %>%
-  left_join(prov_popests, by = "province")
-```
-
-
-```{r}
-prov_all_long %>%
-ggplot() +
-  geom_line(aes(x = date,
-                 y = cases, 
-                 colour = type)) +
-  facet_wrap(~ province,
-             scales = "free_y")
+  left_join(prov_popests, by = "province") %>%
+  # Remove punctuations and capitalise first letter of every word
+  mutate(province = str_replace_all(province, "[[:punct:]]", " ")) %>%
+  mutate(province = str_to_title(province),
+         type = str_to_title(type)) %>%
+  # Uniquely identify each observation with ID for plotting
+  mutate(ID = row_number())
 ```
 
 
@@ -147,12 +146,183 @@ covid_SA <- coronavirus %>%
          date >= "2020-03-05") # Show data from first case recorded onwards
 ```
 
+# Plot 1
+
+```{r plot1, eval = FALSE}
+p1 <- prov_all_long %>% 
+  # Uniquely identify each observation with ID
+  mutate(ID = row_number()) %>%
+  filter(date == "2020-07-08") %>%
+ggplot(aes(x = ID,
+           y = cases, 
+           size = pop_ests,
+           colour = province,
+           group = date)) +
+  geom_point() +
+  scale_size(guide = 'none') + # Remove legend for population estimates as it is shown in plotly
+  scale_size_continuous(range = c(5, 10)) + # Increases sizes of dot points
+  facet_wrap(~ type,
+             scales = "free_y") +
+  theme_linedraw() +
+  theme(legend.position = "bottom",
+        axis.text.x.bottom = element_blank(),
+        axis.ticks = element_blank(),
+        rect = element_rect(fill = "#df9797"),
+        text = element_text(color = "white", size = 10),
+        panel.background = element_rect(fill = "#df9797"),
+        axis.text = element_text(color = "white"),
+        panel.border = element_rect(color = "black", size = 1.2),
+        plot.title = element_text(size = 12, face = "bold", colour = "white"),
+        panel.grid = element_blank(),
+        legend.title = element_text(color = "white", size = 10), # Change size of text in legend title
+        legend.text = element_text(color = "white", size = 10), # Change size of text in legend title
+        legend.background = element_rect(fill = "black"), # change legend background 
+        legend.key = element_rect(fill = "black") # change legend background 
+        ) +
+  guides(colour = guide_legend(override.aes = list(size = 3)))
+```
+
+
 ```{r}
-covid_SA %>%
-  ggplot() +
+# Filter to only confirmed cases
+confirmed_long <- prov_all_long %>%
+  filter(type == "Confirmed")
+
+# Create button attributes 
+button_list <- lapply(1:length(unique(confirmed_long$date)), function(x){
+  list(method = "restyle",
+       args = list("transforms[0].value", (unique(confirmed_long$date))[x]),
+       label = (unique(prov_all_long$date))[x])
+})
+
+type_list <-  list(
+  type = 'dropdown',
+  active = -1,
+  xanchor = 'center',
+  yanchor = "top",
+  pad = list('r' = 0, 't' = 10, 'b' = 10),
+  x = 0.5,
+  y = 1,
+  buttons = button_list # assign button_list object to buttons
+)
+
+# Hide x-axis
+ax <- list(
+  title = "",
+  zeroline = FALSE,
+  showline = FALSE,
+  showticklabels = FALSE,
+  showgrid = FALSE
+)
+
+plot_ly(confirmed_long, 
+        x = ~ID,
+        y = ~ cases,
+        size = ~ pop_ests,
+        sizes = c(500, 4000), # Adjust size of population estimates
+        color = ~ province,
+        colors = ~ c("#5ccdcd", "#cd5c5c", "#5c95cd", "#cd5c95", "#cd955c", "#5cc5c0", "#889977", "#546270", "800080"),
+        customdata= ~date,
+        type = "scatter",
+        mode = "markers",
+        # Assign hover info
+        text = ~ paste('</br> Province: ', province,
+                  '</br> Population: ',pop_ests,
+                  '</br> Total Cases: ', cases),
+        hoverinfo = "text",
+        # Assign filter and target
+        transforms = list(
+          list(
+            type = 'filter',
+            target = 'customdata',
+            operation = '=',
+            value = confirmed_long$date
+        )
+        )
+        ) %>%
+  layout(updatemenus = list(type_list),
+         xaxis = ax,
+         title = "Are Provinces with Higher Population Associated with more Confirmed Cases?"
+         ) %>%
+  # Hide ModeBar 
+  config(displayModeBar = FALSE)
+```
+
+
+# Plot 2
+```{r plot-2, eval = FALSE}
+g2 <- ggplot(prov_all_long) +
   geom_line(aes(x = date,
-                y = cases,
-                colour = type)) +
-  theme(legend.position = "bottom")
+            y = cases,
+            colour = province)) +
+  facet_wrap(~ type) +
+  theme_linedraw() +
+  scale_colour_brewer(palette = "Dark2") +
+    scale_x_date(date_breaks = "1 week", 
+                 date_labels = "%b %d") +
+  theme(legend.position = "bottom",
+        rect = element_rect(fill = "#df9797"),
+        text = element_text(color = "white", size = 10),
+        panel.background = element_rect(fill = "#df9797"),
+        axis.text = element_text(color = "white"),
+        axis.title.x = element_blank(), # Remove x-axis title
+        panel.border = element_rect(color = "black", size = 1.2),
+        plot.title = element_text(size = 12, face = "bold", colour = "white"),
+        panel.grid = element_blank(),
+        legend.title = element_text(color = "white", size = 10), 
+        legend.text = element_text(color = "white", size = 10), 
+        legend.background = element_rect(fill = "black"), 
+        legend.key = element_rect(fill = "black"), 
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5) # Rotate x-axis labels
+        ) 
+```
+
+
+# Interactive Plot 2
+```{r interactive-plot-2}
+require(crosstalk)
+
+prov <- highlight_key(prov_all_long)
+
+gg <- ggplot(prov) +
+  geom_line(aes(x = date,
+            y = cases,
+            colour = province,
+            group = province,
+            text = paste('</br> Date:', date,
+                  '</br> Total Cases:', cases,
+                  '</br> Province:', province))) +
+  facet_wrap(~ type) +
+  theme_linedraw() +
+  scale_colour_brewer(palette = "Dark2") +
+    scale_x_date(date_breaks = "1 week", 
+                 date_labels = "%b %d") +
+  theme(legend.position = "none",
+        rect = element_rect(fill = "#d37070"),
+        text = element_text(color = "white", size = 10),
+        panel.background = element_rect(fill = "#d37070"),
+        axis.text = element_text(color = "white"),
+        axis.title = element_blank(), # Remove x-axis title
+        panel.border = element_rect(color = "black", size = 1.2),
+        plot.title = element_text(size = 12, face = "bold", colour = "white"),
+        panel.grid = element_blank(),
+        legend.title = element_text(color = "white", size = 10), 
+        legend.text = element_text(color = "white", size = 10), 
+        legend.background = element_rect(fill = "black"), 
+        legend.key = element_rect(fill = "black"), 
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5) # Rotate x-axis labels
+        ) 
+
+filter <- bscols(
+  filter_select(id = "ID", 
+                label = "Select a Province",
+                sharedData = prov,
+                group = ~ province),
+  ggplotly(gg, tooltip = c("text")) %>%
+    config(displayModeBar = F), 
+  widths = c(12,12) 
+)
+
+bscols(filter)
 ```
 
