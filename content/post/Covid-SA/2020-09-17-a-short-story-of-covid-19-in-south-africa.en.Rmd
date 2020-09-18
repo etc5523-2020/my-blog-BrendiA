@@ -18,35 +18,32 @@ image:
   focal_point: ''
   preview_only: no
 projects: []
+bibliography: [references.bib]
+link-citations: true
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, echo = FALSE, fig.height = 7.5, fig.width = 6)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, echo = FALSE, fig.height = 10, fig.width = 10)
 
 # Load library
 library(tidyverse)
 library(coronavirus) # devtools::install_github("RamiKrispin/coronavirus")
-library(rnaturalearth) # devtools::install_github("ropenscilabs/rnaturalearth")
 library(stringr)
 library(janitor)
 library(crosstalk)
 library(plotly)
-library(kableExtra)
 library(DT)
 library(htmlwidgets)
 ```
 
 # Introduction
 
-This blog will analyse the COVID-19 cases of South Africa. Relative to the previous blog of COVID-19 cases in Singapore South Africa's economic status, infrastructure, education levels, are generally inferior to that of Singapore as they are a third world country. Furthermore, South Africa's population is approximately ten folds of that of Singapore.
+This blog will analyse the COVID-19 cases of South Africa. Relative to the previous blog of COVID-19 cases in Singapore South Africa's economic status, infrastructure, education levels, are generally inferior to that of Singapore as they are a third world country. Furthermore, South Africa's population is approximately ten folds of that of Singapore. 
 
 In examining the COVID-19 cases in South Africa, I will break down the cases into distinct provinces of South Africa to verify if a bigger population is associated with a larger number of confirmed cases, deaths and recovered cases.
 
 
 ```{r tb1-interactive}
-library(coronavirus)
-
-
 tb1 <- coronavirus %>%
   pivot_wider(names_from = type,
               values_from = cases) %>%
@@ -91,7 +88,7 @@ The table above shows the top 100 countries with the highest confirmed cases. As
 
 To analyse the COVID-19 cases, I extracted the daily summary of COVID-19 cases in the `coronavirus` package. This package contains the raw data in a tidy format, summarising the daily cases by state/province and is readily available in this [GitHub Link](https://github.com/RamiKrispin/coronavirus). Each observation represents the total number of cases recorded in the state/province, where each cases are identified by their case type, spanning from 2020-01-23 and it updated regularly. It was really convenient to use this data set as no data wrangling had to be done.
 
-Next, I downloaded the population data and cumulative confirmed, deaths and recovered cases from this [GitHub Link](https://github.com/RamiKrispin/coronavirus) (@marivate2020use). The cleaning process included using regular expressions to manipulate character strings, and relational joins to join data sets with matching observations. The cleaned data set was in the same format with that of the `coronavirus` dataset.
+Next, I downloaded the population data and cumulative confirmed, deaths and recovered cases from this [GitHub Link](https://github.com/RamiKrispin/coronavirus) (@marivate_vukosi_2020_3819126). Using the same GitHub repo, I retrieved the population estimates for each of the province in South Africa. The cleaning process included using regular expressions to manipulate character strings, and relational joins to join data sets with matching observations. The cleaned data set was in the same format with that of the `coronavirus` dataset.
 
 ```{r province-data}
 # Cumulative confirmed cases by province
@@ -181,25 +178,11 @@ prov_all_long <- prov_all_long %>%
 ```
 
 
-# Introduction
+# COVID-19 Cases in South Africa
 
+## How do the Cases Differ in Each Province?
 
-
-
-# COVID-19 Cases in Singapore
-
-## Getting the Data
-
-```{r read-in-data}
-# From coronavirus package: long format of covid cases
-covid_SA <- coronavirus %>% 
-  filter(country == "South Africa",
-         date >= "2020-03-05") # Show data from first case recorded onwards
-```
-
-# Plot 1
-
-```{r plot1, eval = FALSE}
+```{r plot1-static, eval = FALSE}
 p1 <- prov_all_long %>% 
   # Uniquely identify each observation with ID
   mutate(ID = row_number()) %>%
@@ -234,7 +217,7 @@ ggplot(aes(x = ID,
 ```
 
 
-```{r}
+```{r plot1-interactive}
 # Filter to only confirmed cases
 confirmed_long <- prov_all_long %>%
   filter(type == "Confirmed")
@@ -269,7 +252,7 @@ ax <- list(
 plot_ly(confirmed_long, 
         x = ~ID,
         y = ~ cases,
-        size = ~ pop_ests,
+        size = ~ prop_of_total,
         sizes = c(500, 4000), # Adjust size of population estimates
         color = ~ province,
         colors = ~ c("#5ccdcd", "#cd5c5c", "#5c95cd", "#cd5c95", "#cd955c", "#5cc5c0", "#889977", "#546270", "800080"),
@@ -278,7 +261,7 @@ plot_ly(confirmed_long,
         mode = "markers",
         # Assign hover info
         text = ~ paste('</br> Province: ', province,
-                  '</br> Population: ',pop_ests,
+                  '</br> Proportion of South Africa Population: ', prop_of_total,
                   '</br> Total Cases: ', cases),
         hoverinfo = "text",
         # Assign filter and target
@@ -299,8 +282,33 @@ plot_ly(confirmed_long,
   config(displayModeBar = FALSE)
 ```
 
+The interactive plot above shows that confirmed cases in each province on a given date, where the total cases are denoted on the y-axis. Furthermore, the province's population as a proportion of South Africa's population is indicated by the size of the dot points. Here, Gauteng have the largest population, followed by Kwazulu Natal. 
 
-# Plot 2
+As we go through the timeline in this interactive plot, we can see that Gauteng and Kwazulu Natal led in the most number of confirmed cases from the first known case till late April, before Western Cape took over. In May, Western had an exponential increase in the total number of cases, where cases increases from about 2,500 cases in the first of May to about 23,000 cases at the end of May. On the 8th of July, Gauteng overtook Western Cape in the total number of cases and had the most confirmed cases since. In addition, Kwazulu Natal caught up with Western Cape in mid-August.
+
+Generally, the confirmed cases in the Free State, Limpopo, Mpumalanga, Northern Cape and North West stayed relatively low as compared to the other states. Not to mention, cases in Free State surged early in April, but the cases were contained well and did not rise like the other states. Interestingly, Western Cape has approximately less than half the population to that of Kwazulu Natal. However, their cases were very similar at the end of the timeline.
+
+According to the Bi-annual Report of the "Domestic Tourism Survey" (@tourismstats), the most popular destinations were Limpopo, followed by those bound for Gauteng, and Western Cape for day travellers. Similarly, Limpopo was the main destination for those taking overnight trips. Although Limpopo was the main tourist destination, it has the lowest confirmed cases.
+
+To further examine the COVID-19 trend in each provinces, the lockdown measures implemented in South Africa will be scrutinised in the next section.
+
+
+## How effective are the Lockdown Measures in South Africa?
+
+```{r}
+prov_all_long <- prov_all_long %>%
+  mutate(phase =
+           case_when(
+          between(date, as.Date("2020-03-05"), as.Date("2020-03-25")) ~ "No Lockdown",
+          between(date, as.Date("2020-03-26"), as.Date("2020-04-30")) ~ "Lockdown",
+          between(date, as.Date("2020-05-01"), as.Date("2020-05-31")) ~ "Level 4",
+          between(date, as.Date("2020-06-01"), as.Date("2020-08-16")) ~ "Level 3",
+          between(date, as.Date("2020-08-17"), as.Date("2020-09-21")) ~ "Level 2")
+         ) %>%
+  mutate(phase = as.factor(phase))
+```
+
+
 ```{r plot-2, eval = FALSE}
 g2 <- ggplot(prov_all_long) +
   geom_line(aes(x = date,
@@ -330,7 +338,7 @@ g2 <- ggplot(prov_all_long) +
 
 
 # Interactive Plot 2
-```{r interactive-plot-2}
+```{r interactive-plot-2, fig.height = 8, fig.width = 12}
 require(crosstalk)
 
 prov <- highlight_key(prov_all_long)
@@ -339,28 +347,23 @@ gg <- ggplot(prov) +
   geom_line(aes(x = date,
             y = cases,
             colour = province,
+            label = phase,
             group = province,
             text = paste('</br> Date:', date,
                   '</br> Total Cases:', cases,
-                  '</br> Province:', province))) +
+                  '</br> Province:', province,
+                  '</br> phase:', phase))) +
   facet_wrap(~ type) +
   theme_linedraw() +
-  scale_colour_brewer(palette = "Dark2") +
+  labs(title = "Total Cases for Each Province") +
+  scale_colour_brewer(palette = "Set3") +
     scale_x_date(date_breaks = "1 week", 
                  date_labels = "%b %d") +
   theme(legend.position = "none",
-        rect = element_rect(fill = "#d37070"),
-        text = element_text(color = "white", size = 10),
-        panel.background = element_rect(fill = "#d37070"),
-        axis.text = element_text(color = "white"),
-        axis.title = element_blank(), # Remove x-axis title
+        axis.title = element_blank(), 
         panel.border = element_rect(color = "black", size = 1.2),
-        plot.title = element_text(size = 12, face = "bold", colour = "white"),
+        plot.title = element_text(size = 12, face = "bold"),
         panel.grid = element_blank(),
-        legend.title = element_text(color = "white", size = 10), 
-        legend.text = element_text(color = "white", size = 10), 
-        legend.background = element_rect(fill = "black"), 
-        legend.key = element_rect(fill = "black"), 
         axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5) # Rotate x-axis labels
         ) 
 
@@ -369,16 +372,23 @@ filter <- bscols(
                 label = "Select a Province",
                 sharedData = prov,
                 group = ~ province),
+  filter_checkbox(id = "ID2",
+                  label = "Lockdown Measure",
+                  sharedData = prov,
+                  group = ~ phase),
   ggplotly(gg, tooltip = c("text")) %>%
     config(displayModeBar = F), 
-  widths = c(12,12) 
+  widths = c(12, 12, 12) 
 )
 
 bscols(filter)
 ```
 
+As compared to the rest of world, South Africa was one of the countries who had their first COVID-19 cases only in March. The interactive plot above shows the total cases for each province. The check boxes and select box controls allows one to customise the plot based on the province and the lockdown measure. As an overview, the death rates were very low as compared to the confirmed cases and the confirmed cases were fairly similar to that of the recovered cases. 
 
+The nation’s leadership was widely praised for reacting decisively and early by implementing stringent lockdown regulations (@broadbent2020). The plot illustrates that the government implemented a national lockdown in a matter of 20 days. Many health experts asserted that social distancing was nearly unattainable in countries like South Africa (@harding2020); especially in urbanised areas where population density is exceptionally high and large families sharing a single room are a common sight. 
 
+Based on the plot, the lockdown proved to be fairly effective as cases were and increasing at a relatively very slow pace in all provinces, with minute increases over the few weeks. As the nation transitioned to level 4, we see a significant increase in confirmed cases in Western Cape, where cases went from 2,342 to 21,382 with restrictions eased. Despite a rapid rise in cases, the nation opted to further ease restrictions to level 3, and it is manifest that the surge in cases in all provinces occurred when lockdown measures were eased to stage 3. The president asserted that easing restrictions will only 'revive the country's flagging economy' (@harding2020). In my opinion, the issue of reopening the country is a rather contentious one, especially in a third-world country like South Africa. Research have affirmed that more than 40% of the South African population living below the poverty line and without sufficient state assistance, those people have also been at risk of hunger without an income (@salim2020). Nevertheless, at the most recent stage of the restriction, the plot illustrates that the curve seems to be flattening for all provinces, which is a good sign. 
 
 # Acknowledgements
 
@@ -387,12 +397,16 @@ The programming language used to analyse the trends of global astronautical expl
 Following packages has been included in our Rmd file.
 
 - package tidyverse (1.3.0) [@tidyverse],
-- package dplyr (1.0.1) [@dplyr],
 - package plotly (4.9.2.1) [@plotly],
-- package ggplot2 (3.3.2) [@ggplot2]
-- package geomnet (0.3.0) [@geomnet]
 - package DT (0.15) [@DT]
 - package htmltools (0.5.0) [@htmltools]
-- package patchwork (1.0.1) [@patchwork]
+- package coronavirus (0.3.0.9000) [@coronavirusR]
+- package stringr (1.4.0) [@stringr]
+- package janitor (2.0.1) [@janitor]
+- package crosstalk (1.1.0.1) [@crosstalk]
+- package htmlwidgets (1.5.1) [@htmlwidgets]
 
 # References
+
+
+
