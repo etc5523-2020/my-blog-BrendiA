@@ -23,7 +23,7 @@ link-citations: true
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, echo = FALSE, fig.height = 10, fig.width = 10)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, echo = FALSE, fig.height = 8, fig.width = 7)
 
 # Load library
 library(tidyverse)
@@ -336,9 +336,7 @@ g2 <- ggplot(prov_all_long) +
         ) 
 ```
 
-
-# Interactive Plot 2
-```{r interactive-plot-2, fig.height = 8, fig.width = 12}
+```{r interactive-plot-2, out.width="150%"}
 require(crosstalk)
 
 prov <- highlight_key(prov_all_long)
@@ -378,7 +376,7 @@ filter <- bscols(
                   group = ~ phase),
   ggplotly(gg, tooltip = c("text")) %>%
     config(displayModeBar = F), 
-  widths = c(12, 12, 12) 
+  widths = c(12, 12, 12)
 )
 
 bscols(filter)
@@ -392,20 +390,19 @@ Based on the plot, the lockdown proved to be fairly effective as cases were and 
 
 # Acknowledgements
 
-The programming language used to analyse the trends of global astronautical exploration is R (4.0.2) [@R]. And the platform which used for running R language is Rstudio (1.3.1056) [@Rstudio].
+The following packages has been included for this analysis Rmd file:
 
-Following packages has been included in our Rmd file.
-
-- package tidyverse (1.3.0) [@tidyverse],
-- package plotly (4.9.2.1) [@plotly],
-- package DT (0.15) [@DT]
-- package htmltools (0.5.0) [@htmltools]
-- package coronavirus (0.3.0.9000) [@coronavirusR]
-- package stringr (1.4.0) [@stringr]
-- package janitor (2.0.1) [@janitor]
-- package crosstalk (1.1.0.1) [@crosstalk]
-- package htmlwidgets (1.5.1) [@htmlwidgets]
-
+- package tidyverse (1.3.0) [@tidyverse],  
+- package plotly (4.9.2.1) [@plotly],  
+- package DT (0.15) [@DT]  
+- package htmltools (0.5.0) [@htmltools]  
+- package coronavirus (0.3.0.9000) [@coronavirusR]  
+- package stringr (1.4.0) [@stringr]  
+- package janitor (2.0.1) [@janitor]  
+- package crosstalk (1.1.0.1) [@crosstalk]  
+- package htmlwidgets (1.5.1) [@htmlwidgets]  
+  
+  
 # References
 
 
