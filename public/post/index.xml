@@ -5,12 +5,48 @@
     <link>/post/</link>
       <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     <description>Posts</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Thu, 17 Sep 2020 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Thu, 15 Oct 2020 00:00:00 +0000</lastBuildDate>
     <image>
       <url>/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_2.png</url>
       <title>Posts</title>
       <link>/post/</link>
     </image>
+    
+    <item>
+      <title>Shiny App Self-Review</title>
+      <link>/post/shinyapp-review/shiny-app-self-review/</link>
+      <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
+      <guid>/post/shinyapp-review/shiny-app-self-review/</guid>
+      <description>
+&lt;script src=&#34;/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;div id=&#34;introduce-shiny-app&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Introduce Shiny App&lt;/h2&gt;
+&lt;/div&gt;
+&lt;div id=&#34;what-the-shiny-app-does&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;What the shiny app does&lt;/h2&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;self-review&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Self Review&lt;/h1&gt;
+&lt;div id=&#34;what-was-done-well&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;What was done well?&lt;/h2&gt;
+&lt;/div&gt;
+&lt;div id=&#34;what-are-the-points-i-can-improve-on&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;What are the points I can improve on?&lt;/h2&gt;
+&lt;/div&gt;
+&lt;div id=&#34;what-are-some-things-that-youd-like-to-add-thats-plausible&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;What are some things that you’d like to add that’s plausible?&lt;/h2&gt;
+&lt;/div&gt;
+&lt;div id=&#34;what-are-some-things-that-youd-like-that-add-but-cannot-be-done-yet-due-to-limitation-in-datatechnology&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;What are some things that you’d like that add but cannot be done yet due to limitation in data/technology?&lt;/h2&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>A Short Story of COVID-19 in Singapore</title>

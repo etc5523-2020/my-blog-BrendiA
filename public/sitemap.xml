@@ -33,6 +33,36 @@
   </url>
   
   <url>
+    <loc>/categories/</loc>
+    <lastmod>2020-10-15T12:31:07+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2020-10-15T12:31:07+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/category/r/</loc>
+    <lastmod>2020-10-15T12:31:07+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tag/r-markdown/</loc>
+    <lastmod>2020-10-15T12:31:07+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/shinyapp-review/shiny-app-self-review/</loc>
+    <lastmod>2020-10-15T12:31:07+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2020-10-15T12:31:07+11:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/post/covid-sa/a-short-story-of-covid-19-in-south-africa/</loc>
     <lastmod>2020-09-17T01:32:24+10:00</lastmod>
   </url>
@@ -43,32 +73,7 @@
   </url>
   
   <url>
-    <loc>/categories/</loc>
-    <lastmod>2020-09-17T01:32:24+10:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/</loc>
-    <lastmod>2020-09-17T01:32:24+10:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/post/covid-sa/</loc>
-    <lastmod>2020-09-17T01:32:24+10:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/category/r/</loc>
-    <lastmod>2020-09-17T01:32:24+10:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tag/r-markdown/</loc>
-    <lastmod>2020-09-17T01:32:24+10:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
     <lastmod>2020-09-17T01:32:24+10:00</lastmod>
   </url>
   
