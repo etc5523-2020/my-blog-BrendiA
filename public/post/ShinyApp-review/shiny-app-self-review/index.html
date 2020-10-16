@@ -30,7 +30,7 @@
   
     
   
-  <meta name="description" content="The Shiny App The interactive web application was created to provide key data visualisations and allow users to explore Covid-19 cases across the U.S states. The interactive features allow for a more personalised user experience, to explore as little or as much of the analysed data.">
+  <meta name="description" content="The Shiny Application The interactive web application was created to provide key data visualisations and allow users to explore Covid-19 trends across the U.S states. The interactive features allow for a more personalised user experience, to explore as little or as much of the analysed data.">
 
   
   <link rel="alternate" hreflang="en-us" href="/post/shinyapp-review/shiny-app-self-review/">
@@ -271,7 +271,7 @@
   <meta property="og:site_name" content="Brendi&#39;s blog for ETC5523">
   <meta property="og:url" content="/post/shinyapp-review/shiny-app-self-review/">
   <meta property="og:title" content="Shiny App Self-Review | Brendi&#39;s blog for ETC5523">
-  <meta property="og:description" content="The Shiny App The interactive web application was created to provide key data visualisations and allow users to explore Covid-19 cases across the U.S states. The interactive features allow for a more personalised user experience, to explore as little or as much of the analysed data."><meta property="og:image" content="/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_2.png">
+  <meta property="og:description" content="The Shiny Application The interactive web application was created to provide key data visualisations and allow users to explore Covid-19 trends across the U.S states. The interactive features allow for a more personalised user experience, to explore as little or as much of the analysed data."><meta property="og:image" content="/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_2.png">
   <meta property="twitter:image" content="/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_2.png"><meta property="og:locale" content="en-us">
   
     
@@ -321,7 +321,7 @@
       "url": "/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_192x192_fill_lanczos_center_2.png"
     }
   },
-  "description": "The Shiny App The interactive web application was created to provide key data visualisations and allow users to explore Covid-19 cases across the U.S states. The interactive features allow for a more personalised user experience, to explore as little or as much of the analysed data."
+  "description": "The Shiny Application The interactive web application was created to provide key data visualisations and allow users to explore Covid-19 trends across the U.S states. The interactive features allow for a more personalised user experience, to explore as little or as much of the analysed data."
 }
 </script>
 
@@ -645,40 +645,37 @@
 <script src="/rmarkdown-libs/widgetframe-binding/widgetframe.js"></script>
 
 
-<div id="the-shiny-app" class="section level2">
-<h2>The Shiny App</h2>
-<p>The interactive web application was created to provide key data visualisations and allow users to explore Covid-19 cases across the U.S states. The interactive features allow for a more personalised user experience, to explore as little or as much of the analysed data. In all tabs, the user can use the slider input and drop down list to manoeuvre between dates and states across the United States to visualise how the Covid-19 trajectories changes with these inputs.</p>
-<p>Due to the size of this application, I do not have enough memory space to publish this app on ShinyApps.io with my free account. For this reason, the link to my <a href="">GitHub repo</a> for the Shiny app will be provided.</p>
+<div id="the-shiny-application" class="section level2">
+<h2>The Shiny Application</h2>
+<p>The interactive web application was created to provide key data visualisations and allow users to explore Covid-19 trends across the U.S states. The interactive features allow for a more personalised user experience, to explore as little or as much of the analysed data. In all tabs, the user can make use of the slider input and drop-down list to manoeuvre between dates and states across the United States to visualise how the Covid-19 trajectories changes with these inputs.</p>
+<p>Due to the size of this application, I do not have enough instant size to publish this app on ShinyApps.io with my free account. For this reason, the link to my Github repository for the Shiny app is provided <a href="https://github.com/etc5523-2020/shiny-assessment-BrendiA">here</a>.</p>
 </div>
-<div id="motivation-of-the-shiny-app" class="section level2">
-<h2>Motivation of the Shiny App</h2>
+<div id="functions-of-the-shiny-application" class="section level2">
+<h2>Functions of the Shiny Application</h2>
 <div id="tab-1-united-states-covid-19-cases-per-100000-by-state" class="section level3">
 <h3>Tab 1: United States COVID-19 Cases (per 100,000) by State</h3>
 <iframe width="720" height="400" src="../vid/tab1_example.mp4" frameborder="0" allowfullscreen>
 </iframe>
-<p>The dataset for this component originates from the NY Times (<em>Reference</em>).</p>
-<p>This component provides the confirmed Covid-19 cases, per 100,000 population that were reported by the state on a given date (<em>Reference to NY Times</em>). The total confirmed cases is plotted on the U.S state map, and is made with a sequential colour scale to establish the geographical location in which the total confirmed cases are the highest. This trend is also plotted on a histogram on the side bar panel, as the pattern can be better articulated since people are generally better at comparing lengths on a common scale as compared to shading or colour saturations (<span class="citation">(Cleveland and McGill <a href="#ref-cleveland1984graphical" role="doc-biblioref">1984</a>)</span>).</p>
-<p>As a case in point, it can be observed in this tab that after New York surpassed Washington on the 16th March 2020 in the total number of Covid-19 cases, they have since led the United States in this aspect up till this date.</p>
+<p>The dataset used for this section of the application originates from the NY Times (<span class="citation">Sun et al. (<a href="#ref-albert_sun_2020_3981451" role="doc-biblioref">2020</a>)</span>). This component provides the confirmed Covid-19 cases, per 100,000 population reported by the state on a given date. The total confirmed cases are plotted on the U.S state map, and is made with a sequential colour scale to establish the geographical location of the states with the highest total confirmed cases. This trend is also plotted on a histogram on the sidebar panel, as the comparison between states can be better articulated since people are generally better at comparing lengths on a common scale as compared to shading or colour saturations (<span class="citation">Cleveland and McGill (<a href="#ref-cleveland1984graphical" role="doc-biblioref">1984</a>)</span>).</p>
 </div>
 <div id="tab-2-positive-results-in-covid-19-testing" class="section level3">
 <h3>Tab 2: Positive Results in Covid-19 testing</h3>
 <iframe width="720" height="400" src="../vid/tab2_example.mp4" frameborder="0" allowfullscreen>
 </iframe>
-<p>The dataset for this component originates from the NY Times (<em>Reference</em>). Covid-19 testing promotes early detection of community-acquired Covid-19 cases, which can support in public health response to the pandemic such as the allocation of resources for the more vulnerable regions.</p>
-<p>This section consists of two components. The first tab measures the percentage of Covid-19 tests returning positive on a given date and is charted on the US state map. Correspondingly, the second segment then depicts the aggregated test results as of the chosen date selected by the user. Not to mention, occasional anomalies (e.g. significant drop in tests or 100% positive test results) can be observed and is generally due to case definitions and non-reporting.</p>
+<p>The dataset for this component originates from the <em>covidtracking.com</em> (<span class="citation">The Covid Tracking Project (<a href="#ref-covidtracking" role="doc-biblioref">2020</a>)</span>). Covid-19 testing promotes early detection of community-acquired Covid-19 cases, which can support public health response to the pandemic such as the allocation of resources for the more vulnerable regions. This section consists of two components. The first tab measures the percentage of Covid-19 tests returning positive on a given date, and is charted on the US state map. Correspondingly, the second segment depicts the aggregated test results as of the chosen date selected by the user. Not to mention, occasional anomalies (e.g. significant drop in tests or 100% positive test results) can be observed and is generally due to case definitions and non-reporting.</p>
 </div>
 </div>
 <div id="self-review" class="section level1">
 <h1>Self Review</h1>
 <div id="what-was-done-well" class="section level2">
 <h2>What was done well?</h2>
-<p>The layout of the app was structured well. For instance, I utilised <code>fluidRow()</code>, to manually divide user interface into grids to my liking and <code>tabsetPanel()</code> to combine panels into a stack. Further, I customised the texts in the UI with <code>shing::tags$</code> functions to build specific HTML tags, it took me a while to figure out the different HTML tags!</p>
-<p>Next, reactive programming was done fairly well. To emphasise, due to the long running-tasks embedded in this app, it was not ideal to wait for the app to compute every reactive expression each time the user changes the input. For this reason, I applied <code>observeEvent()</code> function to delay computation of this reactive expression only until the action button is clicked.</p>
+<p>The layout of the app was structured well. For instance, I applied <code>fluidRow()</code> to manually divide user interface into grids to my liking and <code>tabsetPanel()</code> to combine panels into a stack. Further, I customised the texts in the UI with <code>shing::tags$</code> functions to build specific HTML tags, it took me a while to figure out the different HTML tags!</p>
+<p>Next, reactive programming was done fairly well. To emphasise, due to the long running-tasks embedded in this app, it was not ideal to wait for the app to compute every reactive expression each time the user changes the input. For this reason, I applied <code>observeEvent()</code> function to delay the computation of this reactive expression only until the action button is clicked.</p>
 </div>
 <div id="areas-of-improvement" class="section level2">
 <h2>Areas of Improvement</h2>
-<p>Debugging shiny applications is something that I need to work on. Firstly, running reactive codes was problematic for me as I was accustomed to the usual R markdown file system. For this assignment, I created a new Rmd file to make reference to when I ran into errors, which was not the best practice. I should have made use of tools such as reactive graphs, log statements and breakpoints.</p>
-<p>Organising large data files to optimise the speed of the Shiny app was another aspect that I needed to improve on. In this case, the joined data set (Covid-19 cases and Map data) consisted of more than 2 million observations. For example, I could have used <code>geom_sf</code> or <code>leaflet()</code> map to plot the map instead of <code>geom_polygon</code> to reduce the object size. By doing it this way, I may not have to join all the map coordinates with the covid-19 data since I could overlay the map with the variables in the Covid-19 data.</p>
+<p>Debugging shiny applications is something that I need to work on. Firstly, running reactive codes was problematic for me as I was accustomed to the usual R markdown file system. For this assignment, I created a new Rmd file to make reference to when I ran into errors, which was not the best practice. I should utilise tools such as reactive graphs, log statements and breakpoints.</p>
+<p>Organising large data files to optimise the speed of the Shiny application was another aspect that I needed to work on. In this case, the joined data set (Covid-19 cases and Map data) consisted of more than 2 million observations. For example, I could have used <code>geom_sf</code> or <code>leaflet()</code> map to plot the map instead of <code>geom_polygon</code> to reduce the object size. By doing it this way, I may not have to join all the map coordinates with the covid-19 data since I could overlay the map with the variables in the Covid-19 data.</p>
 </div>
 <div id="plausible-things-id-like-to-add" class="section level2">
 <h2>Plausible Things I’d like to add</h2>
@@ -686,14 +683,14 @@
 <p>I would also like to add some technical details to the app:</p>
 <ul>
 <li><p><strong>Plotly Input Events and multiple reactive expressions</strong>: Access plotly input events after the map output is generated. For instance, clicking on the state(s) on the U.S. map automatically updates the bar graph to compare the trends of selected states.</p></li>
-<li><p><strong>Cancel long-running tasks while loading:</strong> Due to the large amount of data, it takes about 7 seconds or so to load when running locally, and users cannot do anything until the function finish running. I want to add a ‘cancel button’ so users can cancel the computation of reactive expression any time.</p></li>
-<li><p><strong>Pre-populate or download shiny input based on URL parameters</strong> As the Covid-19 datasets are updated regularly, I would add a download link for users to directly download data directly from the source (e.g. data from GitHub) to provide a complete and up-to-date data of the ongoing outbreak in the Shiny App.</p></li>
+<li><p><strong>Cancel long-running tasks while loading:</strong> Due to the large amount of data, it takes about 7 seconds or so to load when running locally, and users cannot do anything until the function finish running. I want to add a ‘cancel button’ so users can cancel the computation of reactive expression at any time.</p></li>
+<li><p><strong>Pre-populate or download shiny input based on URL parameters</strong> As the Covid-19 datasets are updated regularly, I would like to add a download link for users to download the data directly from the source (e.g. GitHub) to provide a complete and up-to-date data of the ongoing outbreak in the Shiny application.</p></li>
 </ul>
 </div>
 <div id="limitations-of-datatechnology" class="section level2">
 <h2>Limitations of Data/Technology</h2>
-<div id="htmlwidget-1" style="width:100%;height:480px;" class="widgetframe html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1">{"x":{"url":"/post/ShinyApp-review/2020-10-15-shiny-app-self-review.en_files/figure-html//widgets/widget_unnamed-chunk-1.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-1" style="width:100%;height:300%;" class="widgetframe html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"url":"/post/ShinyApp-review/2020-10-15-shiny-app-self-review.en_files/figure-html//widgets/widget_dt-table.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
 <p>A limitation to this Shiny App is the credibility of the data. Due to the various state jurisdictions, case definitions and reporting requirements of each U.S state, the reported values may be subjected to significant variations. To illustrate, in the data retrieved from <em>covidtracking.com</em>, numerous US states did not report the negative results of the covid-19 testing. The ‘state grading system’ (shown in the table below) reveals the data completeness of the total Covid-19 testing in each state (breakdown and criteria for the grades can be found <a href="https://docs.google.com/spreadsheets/u/1/d/e/2PACX-1vRL2zG1o-qj9l2sl19d1lj1oHd6WbkJ0ukFwN04a_ms_ANUdgxTMpI7AF-gbQzwOSreJUDx6PEK7Vnq/pubhtml">here</a>).</p>
 </div>
 </div>
@@ -718,6 +715,12 @@
 </div>
 <div id="ref-widgetframe">
 <p>Karambelkar, Bhaskar. 2017. <em>Widgetframe: ’Htmlwidgets’ in Responsive ’Iframes’</em>. <a href="https://CRAN.R-project.org/package=widgetframe">https://CRAN.R-project.org/package=widgetframe</a>.</p>
+</div>
+<div id="ref-albert_sun_2020_3981451">
+<p>Sun, Albert, Tiff Fehr, Archie Tse, Rachel, and Wilson Andrews. 2020. <em>New York Times Coronavirus (Covid-19) Data in the United States</em> (version 8-10-2020). Zenodo. <a href="https://doi.org/10.5281/zenodo.3981451">https://doi.org/10.5281/zenodo.3981451</a>.</p>
+</div>
+<div id="ref-covidtracking">
+<p>The Covid Tracking Project. 2020. “National: Testing.” <a href="https://covidtracking.com/data/national/tests">https://covidtracking.com/data/national/tests</a>.</p>
 </div>
 <div id="ref-tidyverse">
 <p>Wickham, Hadley, Mara Averick, Jennifer Bryan, Winston Chang, Lucy D’Agostino McGowan, Romain François, Garrett Grolemund, et al. 2019. “Welcome to the tidyverse.” <em>Journal of Open Source Software</em> 4 (43): 1686. <a href="https://doi.org/10.21105/joss.01686">https://doi.org/10.21105/joss.01686</a>.</p>
