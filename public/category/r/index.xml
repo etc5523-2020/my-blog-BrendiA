@@ -25,22 +25,23 @@
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;div id=&#34;the-shiny-app&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;The Shiny App&lt;/h2&gt;
-&lt;p&gt;The Shiny App was created to provide key data visualisations and allow users to explore Covid-19 cases across the U.S states. The interactive features allow for a more personalised user experience, to explore as little or as much of the analysed data. In all tabs, one can use the slider input and drop down list to manoeuvre between dates and states across the United States to visualise how the Covid-19 trajectories changes with these inputs.&lt;/p&gt;
+&lt;p&gt;The interactive web application was created to provide key data visualisations and allow users to explore Covid-19 cases across the U.S states. The interactive features allow for a more personalised user experience, to explore as little or as much of the analysed data. In all tabs, the user can use the slider input and drop down list to manoeuvre between dates and states across the United States to visualise how the Covid-19 trajectories changes with these inputs.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;functions-of-the-shiny-app&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Functions of the Shiny App&lt;/h2&gt;
 &lt;div id=&#34;tab-1-united-states-covid-19-cases-per-100000-by-state&#34; class=&#34;section level3&#34;&gt;
 &lt;h3&gt;Tab 1: United States COVID-19 Cases (per 100,000) by State&lt;/h3&gt;
 &lt;p&gt;[&lt;em&gt;Add video/image&lt;/em&gt;]&lt;/p&gt;
-&lt;p&gt;This tab provides the confirmed Covid-19 cases, per 100,000 population that were reported by the state on a given date (&lt;em&gt;Reference to NY Times&lt;/em&gt;). The U.S. state map provides a sequential colour scale of the total confirmed cases&lt;/p&gt;
-&lt;p&gt;The total confirmed cases is plotted on the U.S state map, and is made with a sequential colour scale to establish the geographical location in which the total confirmed cases are the highest. This trend is also plotted on a histogram on the side bar panel, as I thought the trend can be better articulated since people are generally better at comparing lengths on a common scale as compared to shading or colour saturations (&lt;span class=&#34;citation&#34;&gt;@cleveland1984graphical&lt;/span&gt;).&lt;/p&gt;
-&lt;p&gt;As a case in point, it can be observed in this tab that after New York surpassed Washington on the 16th March 2020 in the total number of Covid-19 cases, they have since led the United States in this aspect up till this date.&lt;/p&gt;
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;../vid/tab1_example.mp4&#34; frameborder=&#34;0&#34; allowfullscreen&gt;
+&lt;/iframe&gt;
 &lt;p&gt;The dataset for this component originates from the NY Times (&lt;em&gt;Reference&lt;/em&gt;).&lt;/p&gt;
+&lt;p&gt;This component provides the confirmed Covid-19 cases, per 100,000 population that were reported by the state on a given date (&lt;em&gt;Reference to NY Times&lt;/em&gt;). The total confirmed cases is plotted on the U.S state map, and is made with a sequential colour scale to establish the geographical location in which the total confirmed cases are the highest. This trend is also plotted on a histogram on the side bar panel, as the pattern can be better articulated since people are generally better at comparing lengths on a common scale as compared to shading or colour saturations (&lt;span class=&#34;citation&#34;&gt;@cleveland1984graphical&lt;/span&gt;).&lt;/p&gt;
+&lt;p&gt;As a case in point, it can be observed in this tab that after New York surpassed Washington on the 16th March 2020 in the total number of Covid-19 cases, they have since led the United States in this aspect up till this date.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;tab-2-positive-results-in-covid-19-testing&#34; class=&#34;section level3&#34;&gt;
 &lt;h3&gt;Tab 2: Positive Results in Covid-19 testing&lt;/h3&gt;
-&lt;p&gt;Covid-19 testing promotes early detection of community-acquired Covid-19 cases, which can support in public health response to the pandemic such as the allocation of resources for the more vulnerable regions.&lt;/p&gt;
-&lt;p&gt;This section will demonstrate the daily proportion of tests returning positive on the U.S state map&lt;/p&gt;
+&lt;p&gt;The dataset for this component originates from the NY Times (&lt;em&gt;Reference&lt;/em&gt;). Covid-19 testing promotes early detection of community-acquired Covid-19 cases, which can support in public health response to the pandemic such as the allocation of resources for the more vulnerable regions.&lt;/p&gt;
+&lt;p&gt;This section consists of two components. The first tab measures the percentage of Covid-19 tests returning positive on a given date and is charted on the US state map. Correspondingly, the second segment then depicts the aggregated test results as of the chosen date selected by the user.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -48,21 +49,43 @@
 &lt;h1&gt;Self Review&lt;/h1&gt;
 &lt;div id=&#34;what-was-done-well&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;What was done well?&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Layout&lt;/strong&gt;
+- Structure of the app was done well
+- Manually divided user interface (ui) into grids using &lt;code&gt;fluidRow&lt;/code&gt;
+- Utilised tab panel to combine different tabs into a single panel&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Reactive Programming&lt;/strong&gt;
+- Used observeEvent() to explicitly trigger an action when action button is clicked
+- Added custom error message when no U.S. states are picked&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;what-are-the-points-i-can-improve-on&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;What are the points I can improve on?&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Debugging of shiny App&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Debugging Process&lt;/strong&gt;
+I could improve on the debugging process of the shiny app. The code execution wasn’t as linear as the usual Rmd files I was accustomed to due to the reactive codes. For this assignment, I created a new Rmd file to make reference to when I ran into errors, which wasn’t the best practice.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Organise large data files to optimise speed of App&lt;/strong&gt;
+- Learn how to organise large data files in a shiny app to optimise performance
+- Data consisted of more than 2 million observations&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Adding new graph on top of map to better communicate results&lt;/strong&gt;
+- In tab 2, map only shows geogrpahical location, users have to hover mouse to see which state does the trned correspond to.
+- Adding graph (e.g. dot point or histogram (&lt;em&gt;Plot above to compare&lt;/em&gt;)) would better articulate this/&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;what-are-some-things-that-youd-like-to-add-thats-plausible&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;What are some things that you’d like to add that’s plausible?&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Plot one more graph on top of table&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Multiple reactive Expressions&lt;/strong&gt;
+- Having more than one reactive expression
+- e.g. In tab 1, when a state is clicked on the U.S state map, the bar plot will automatically update to these states instead of always having to refer to the select input.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Cancel long-running tasks while loading&lt;/em&gt;
+- Due to the large amoung of data, it takes about 5 seconds or so to load when running locally.
+- Ability to cancel task when loading&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Pre-populate or download shiny input based on URL parameters&lt;/em&gt;
+- As the datasets are updated regularly, we may download directly from the source to provide a complete record of the ongoing outbreak.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;what-are-some-things-that-youd-like-that-add-but-cannot-be-done-yet-due-to-limitation-in-datatechnology&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;What are some things that you’d like that add but cannot be done yet due to limitation in data/technology?&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Limitation of data&lt;/strong&gt;
+- hospital vs deaths data (needed more data)
+- Reliability of the data (elaborate on errors - e.g. due to different state jurisdictions or reporting requirements)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Limitation due to technology&lt;/strong&gt;
+-&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </description>

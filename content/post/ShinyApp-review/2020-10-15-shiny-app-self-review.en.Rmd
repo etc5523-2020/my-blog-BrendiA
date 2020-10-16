@@ -32,6 +32,8 @@ The interactive web application was created to provide key data visualisations a
 
 [*Add video/image*]
 
+<iframe width="560" height="315" src="../vid/tab1_example.mp4" frameborder="0" allowfullscreen></iframe>
+
 
 The dataset for this component originates from the NY Times (*Reference*). 
 
