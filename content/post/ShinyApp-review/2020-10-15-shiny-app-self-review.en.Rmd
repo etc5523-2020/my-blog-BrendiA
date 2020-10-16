@@ -61,7 +61,7 @@ The dataset for this component originates from the *covidtracking.com* (@covidtr
 
 # Self Review
 
-## What was done well?
+## What Was Done Well?
 
 The layout of the app was structured well. For instance, I applied `fluidRow()` to manually divide user interface into grids to my liking and `tabsetPanel()` to combine panels into a stack. Further, I customised the texts in the UI with `shing::tags$` functions to build specific HTML tags, it took me a while to figure out the different HTML tags!
 

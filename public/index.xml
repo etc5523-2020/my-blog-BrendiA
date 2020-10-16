@@ -111,7 +111,7 @@
 &lt;div id=&#34;self-review&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Self Review&lt;/h1&gt;
 &lt;div id=&#34;what-was-done-well&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;What was done well?&lt;/h2&gt;
+&lt;h2&gt;What Was Done Well?&lt;/h2&gt;
 &lt;p&gt;The layout of the app was structured well. For instance, I applied &lt;code&gt;fluidRow()&lt;/code&gt; to manually divide user interface into grids to my liking and &lt;code&gt;tabsetPanel()&lt;/code&gt; to combine panels into a stack. Further, I customised the texts in the UI with &lt;code&gt;shing::tags$&lt;/code&gt; functions to build specific HTML tags, it took me a while to figure out the different HTML tags!&lt;/p&gt;
 &lt;p&gt;Next, reactive programming was done fairly well. To emphasise, due to the long running-tasks embedded in this app, it was not ideal to wait for the app to compute every reactive expression each time the user changes the input. For this reason, I applied &lt;code&gt;observeEvent()&lt;/code&gt; function to delay the computation of this reactive expression only until the action button is clicked.&lt;/p&gt;
 &lt;/div&gt;
