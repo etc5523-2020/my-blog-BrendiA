@@ -17,75 +17,95 @@ image:
   focal_point: ''
   preview_only: no
 projects: []
+bibliography: [references.bib]
+link-citations: true
 ---
 
 <script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="/rmarkdown-libs/pymjs/pym.v1.js"></script>
+<script src="/rmarkdown-libs/widgetframe-binding/widgetframe.js"></script>
 
 
-<div id="introduction" class="section level1">
-<h1>Introduction</h1>
 <div id="the-shiny-app" class="section level2">
 <h2>The Shiny App</h2>
 <p>The interactive web application was created to provide key data visualisations and allow users to explore Covid-19 cases across the U.S states. The interactive features allow for a more personalised user experience, to explore as little or as much of the analysed data. In all tabs, the user can use the slider input and drop down list to manoeuvre between dates and states across the United States to visualise how the Covid-19 trajectories changes with these inputs.</p>
+<p>Due to the size of this application, I do not have enough memory space to publish this app on ShinyApps.io with my free account. For this reason, the link to my <a href="">GitHub repo</a> for the Shiny app will be provided.</p>
 </div>
-<div id="functions-of-the-shiny-app" class="section level2">
-<h2>Functions of the Shiny App</h2>
+<div id="motivation-of-the-shiny-app" class="section level2">
+<h2>Motivation of the Shiny App</h2>
 <div id="tab-1-united-states-covid-19-cases-per-100000-by-state" class="section level3">
 <h3>Tab 1: United States COVID-19 Cases (per 100,000) by State</h3>
-<p>[<em>Add video/image</em>]</p>
-<iframe width="560" height="315" src="../vid/tab1_example.mp4" frameborder="0" allowfullscreen>
+<iframe width="720" height="400" src="../vid/tab1_example.mp4" frameborder="0" allowfullscreen>
 </iframe>
 <p>The dataset for this component originates from the NY Times (<em>Reference</em>).</p>
-<p>This component provides the confirmed Covid-19 cases, per 100,000 population that were reported by the state on a given date (<em>Reference to NY Times</em>). The total confirmed cases is plotted on the U.S state map, and is made with a sequential colour scale to establish the geographical location in which the total confirmed cases are the highest. This trend is also plotted on a histogram on the side bar panel, as the pattern can be better articulated since people are generally better at comparing lengths on a common scale as compared to shading or colour saturations (<span class="citation">@cleveland1984graphical</span>).</p>
+<p>This component provides the confirmed Covid-19 cases, per 100,000 population that were reported by the state on a given date (<em>Reference to NY Times</em>). The total confirmed cases is plotted on the U.S state map, and is made with a sequential colour scale to establish the geographical location in which the total confirmed cases are the highest. This trend is also plotted on a histogram on the side bar panel, as the pattern can be better articulated since people are generally better at comparing lengths on a common scale as compared to shading or colour saturations (<span class="citation">(Cleveland and McGill <a href="#ref-cleveland1984graphical" role="doc-biblioref">1984</a>)</span>).</p>
 <p>As a case in point, it can be observed in this tab that after New York surpassed Washington on the 16th March 2020 in the total number of Covid-19 cases, they have since led the United States in this aspect up till this date.</p>
 </div>
 <div id="tab-2-positive-results-in-covid-19-testing" class="section level3">
 <h3>Tab 2: Positive Results in Covid-19 testing</h3>
+<iframe width="720" height="400" src="../vid/tab2_example.mp4" frameborder="0" allowfullscreen>
+</iframe>
 <p>The dataset for this component originates from the NY Times (<em>Reference</em>). Covid-19 testing promotes early detection of community-acquired Covid-19 cases, which can support in public health response to the pandemic such as the allocation of resources for the more vulnerable regions.</p>
-<p>This section consists of two components. The first tab measures the percentage of Covid-19 tests returning positive on a given date and is charted on the US state map. Correspondingly, the second segment then depicts the aggregated test results as of the chosen date selected by the user.</p>
-</div>
+<p>This section consists of two components. The first tab measures the percentage of Covid-19 tests returning positive on a given date and is charted on the US state map. Correspondingly, the second segment then depicts the aggregated test results as of the chosen date selected by the user. Not to mention, occasional anomalies (e.g. significant drop in tests or 100% positive test results) can be observed and is generally due to case definitions and non-reporting.</p>
 </div>
 </div>
 <div id="self-review" class="section level1">
 <h1>Self Review</h1>
 <div id="what-was-done-well" class="section level2">
 <h2>What was done well?</h2>
-<p><strong>Layout</strong>
-- Structure of the app was done well
-- Manually divided user interface (ui) into grids using <code>fluidRow</code>
-- Utilised tab panel to combine different tabs into a single panel</p>
-<p><strong>Reactive Programming</strong>
-- Used observeEvent() to explicitly trigger an action when action button is clicked
-- Added custom error message when no U.S. states are picked</p>
+<p>The layout of the app was structured well. For instance, I utilised <code>fluidRow()</code>, to manually divide user interface into grids to my liking and <code>tabsetPanel()</code> to combine panels into a stack. Further, I customised the texts in the UI with <code>shing::tags$</code> functions to build specific HTML tags, it took me a while to figure out the different HTML tags!</p>
+<p>Next, reactive programming was done fairly well. To emphasise, due to the long running-tasks embedded in this app, it was not ideal to wait for the app to compute every reactive expression each time the user changes the input. For this reason, I applied <code>observeEvent()</code> function to delay computation of this reactive expression only until the action button is clicked.</p>
 </div>
-<div id="what-are-the-points-i-can-improve-on" class="section level2">
-<h2>What are the points I can improve on?</h2>
-<p><strong>Debugging Process</strong>
-I could improve on the debugging process of the shiny app. The code execution wasn’t as linear as the usual Rmd files I was accustomed to due to the reactive codes. For this assignment, I created a new Rmd file to make reference to when I ran into errors, which wasn’t the best practice.</p>
-<p><strong>Organise large data files to optimise speed of App</strong>
-- Learn how to organise large data files in a shiny app to optimise performance
-- Data consisted of more than 2 million observations</p>
-<p><strong>Adding new graph on top of map to better communicate results</strong>
-- In tab 2, map only shows geogrpahical location, users have to hover mouse to see which state does the trned correspond to.
-- Adding graph (e.g. dot point or histogram (<em>Plot above to compare</em>)) would better articulate this/</p>
+<div id="areas-of-improvement" class="section level2">
+<h2>Areas of Improvement</h2>
+<p>Debugging shiny applications is something that I need to work on. Firstly, running reactive codes was problematic for me as I was accustomed to the usual R markdown file system. For this assignment, I created a new Rmd file to make reference to when I ran into errors, which was not the best practice. I should have made use of tools such as reactive graphs, log statements and breakpoints.</p>
+<p>Organising large data files to optimise the speed of the Shiny app was another aspect that I needed to improve on. In this case, the joined data set (Covid-19 cases and Map data) consisted of more than 2 million observations. For example, I could have used <code>geom_sf</code> or <code>leaflet()</code> map to plot the map instead of <code>geom_polygon</code> to reduce the object size. By doing it this way, I may not have to join all the map coordinates with the covid-19 data since I could overlay the map with the variables in the Covid-19 data.</p>
 </div>
-<div id="what-are-some-things-that-youd-like-to-add-thats-plausible" class="section level2">
-<h2>What are some things that you’d like to add that’s plausible?</h2>
-<p><strong>Multiple reactive Expressions</strong>
-- Having more than one reactive expression
-- e.g. In tab 1, when a state is clicked on the U.S state map, the bar plot will automatically update to these states instead of always having to refer to the select input.</p>
-<p><em>Cancel long-running tasks while loading</em>
-- Due to the large amoung of data, it takes about 5 seconds or so to load when running locally.
-- Ability to cancel task when loading</p>
-<p><em>Pre-populate or download shiny input based on URL parameters</em>
-- As the datasets are updated regularly, we may download directly from the source to provide a complete record of the ongoing outbreak.</p>
+<div id="plausible-things-id-like-to-add" class="section level2">
+<h2>Plausible Things I’d like to add</h2>
+<p>In retrospect, I would add a plot or a new tab that showcase Covid-19 trends over time. In my current Shiny app, Covid-19 patterns were only shown at a point in time, and it may be difficult to compare the trends across countries over time to better understand the data.</p>
+<p>I would also like to add some technical details to the app:</p>
+<ul>
+<li><p><strong>Plotly Input Events and multiple reactive expressions</strong>: Access plotly input events after the map output is generated. For instance, clicking on the state(s) on the U.S. map automatically updates the bar graph to compare the trends of selected states.</p></li>
+<li><p><strong>Cancel long-running tasks while loading:</strong> Due to the large amount of data, it takes about 7 seconds or so to load when running locally, and users cannot do anything until the function finish running. I want to add a ‘cancel button’ so users can cancel the computation of reactive expression any time.</p></li>
+<li><p><strong>Pre-populate or download shiny input based on URL parameters</strong> As the Covid-19 datasets are updated regularly, I would add a download link for users to directly download data directly from the source (e.g. data from GitHub) to provide a complete and up-to-date data of the ongoing outbreak in the Shiny App.</p></li>
+</ul>
 </div>
-<div id="what-are-some-things-that-youd-like-that-add-but-cannot-be-done-yet-due-to-limitation-in-datatechnology" class="section level2">
-<h2>What are some things that you’d like that add but cannot be done yet due to limitation in data/technology?</h2>
-<p><strong>Limitation of data</strong>
-- hospital vs deaths data (needed more data)
-- Reliability of the data (elaborate on errors - e.g. due to different state jurisdictions or reporting requirements)</p>
-<p><strong>Limitation due to technology</strong>
--</p>
+<div id="limitations-of-datatechnology" class="section level2">
+<h2>Limitations of Data/Technology</h2>
+<div id="htmlwidget-1" style="width:100%;height:480px;" class="widgetframe html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"url":"/post/ShinyApp-review/2020-10-15-shiny-app-self-review.en_files/figure-html//widgets/widget_unnamed-chunk-1.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
+<p>A limitation to this Shiny App is the credibility of the data. Due to the various state jurisdictions, case definitions and reporting requirements of each U.S state, the reported values may be subjected to significant variations. To illustrate, in the data retrieved from <em>covidtracking.com</em>, numerous US states did not report the negative results of the covid-19 testing. The ‘state grading system’ (shown in the table below) reveals the data completeness of the total Covid-19 testing in each state (breakdown and criteria for the grades can be found <a href="https://docs.google.com/spreadsheets/u/1/d/e/2PACX-1vRL2zG1o-qj9l2sl19d1lj1oHd6WbkJ0ukFwN04a_ms_ANUdgxTMpI7AF-gbQzwOSreJUDx6PEK7Vnq/pubhtml">here</a>).</p>
+</div>
+</div>
+<div id="r-packages-used" class="section level1">
+<h1>R Packages Used</h1>
+<p>The following packages used in the coding script:</p>
+<ul>
+<li><p>tidyverse package (<span class="citation">Wickham et al. (<a href="#ref-tidyverse" role="doc-biblioref">2019</a>)</span>)</p></li>
+<li><p>htmltools package (<span class="citation">Cheng et al. (<a href="#ref-htmltools" role="doc-biblioref">2020</a>)</span>)</p></li>
+<li><p>widgetframe package (<span class="citation">Karambelkar (<a href="#ref-widgetframe" role="doc-biblioref">2017</a>)</span>)</p></li>
+<li><p>DT package (<span class="citation">Xie, Cheng, and Tan (<a href="#ref-DT" role="doc-biblioref">2020</a>)</span>)</p></li>
+</ul>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references hanging-indent">
+<div id="ref-htmltools">
+<p>Cheng, Joe, Carson Sievert, Winston Chang, Yihui Xie, and Jeff Allen. 2020. <em>Htmltools: Tools for Html</em>. <a href="https://CRAN.R-project.org/package=htmltools">https://CRAN.R-project.org/package=htmltools</a>.</p>
+</div>
+<div id="ref-cleveland1984graphical">
+<p>Cleveland, William S, and Robert McGill. 1984. “Graphical Perception: Theory, Experimentation, and Application to the Development of Graphical Methods.” <em>Journal of the American Statistical Association</em> 79 (387): 531–54.</p>
+</div>
+<div id="ref-widgetframe">
+<p>Karambelkar, Bhaskar. 2017. <em>Widgetframe: ’Htmlwidgets’ in Responsive ’Iframes’</em>. <a href="https://CRAN.R-project.org/package=widgetframe">https://CRAN.R-project.org/package=widgetframe</a>.</p>
+</div>
+<div id="ref-tidyverse">
+<p>Wickham, Hadley, Mara Averick, Jennifer Bryan, Winston Chang, Lucy D’Agostino McGowan, Romain François, Garrett Grolemund, et al. 2019. “Welcome to the tidyverse.” <em>Journal of Open Source Software</em> 4 (43): 1686. <a href="https://doi.org/10.21105/joss.01686">https://doi.org/10.21105/joss.01686</a>.</p>
+</div>
+<div id="ref-DT">
+<p>Xie, Yihui, Joe Cheng, and Xianying Tan. 2020. <em>DT: A Wrapper of the Javascript Library ’Datatables’</em>. <a href="https://CRAN.R-project.org/package=DT">https://CRAN.R-project.org/package=DT</a>.</p>
+</div>
 </div>
 </div>

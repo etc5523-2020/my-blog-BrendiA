@@ -17,81 +17,119 @@ image:
   focal_point: ''
   preview_only: no
 projects: []
+bibliography: [references.bib]
+link-citations: true
 ---
 
-# Introduction
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, echo = FALSE)
+
+# Load library
+library(tidyverse)
+library(htmltools)
+library(widgetframe)
+library(DT)
+
+# Read-in data
+us_state_tests <- read_csv("us_state_tests.csv")
+```
 
 ## The Shiny App
 
 The interactive web application was created to provide key data visualisations and allow users to explore Covid-19 cases across the U.S states. The interactive features allow for a more personalised user experience, to explore as little or as much of the analysed data. In all tabs, the user can use the slider input and drop down list to manoeuvre between dates and states across the United States to visualise how the Covid-19 trajectories changes with these inputs.
 
+Due to the size of this application, I do not have enough memory space to publish this app on ShinyApps.io with my free account. For this reason, the link to my [GitHub repo]() for the Shiny app will be provided.
 
-## Functions of the Shiny App
+
+## Motivation of the Shiny App
 
 ### Tab 1: United States COVID-19 Cases (per 100,000) by State
 
-[*Add video/image*]
+<iframe width="720" height="400" src="../vid/tab1_example.mp4" frameborder="0" allowfullscreen>
 
-<iframe width="560" height="315" src="../vid/tab1_example.mp4" frameborder="0" allowfullscreen></iframe>
+</iframe>
 
+The dataset for this component originates from the NY Times (*Reference*).
 
-The dataset for this component originates from the NY Times (*Reference*). 
-
-This component provides the confirmed Covid-19 cases, per 100,000 population that were reported by the state on a given date (*Reference to NY Times*). The total confirmed cases is plotted on the U.S state map, and is made with a sequential colour scale to establish the geographical location in which the total confirmed cases are the highest. This trend is also plotted on a histogram on the side bar panel, as the pattern can be better articulated since people are generally better at comparing lengths on a common scale as compared to shading or colour saturations (@cleveland1984graphical).
+This component provides the confirmed Covid-19 cases, per 100,000 population that were reported by the state on a given date (*Reference to NY Times*). The total confirmed cases is plotted on the U.S state map, and is made with a sequential colour scale to establish the geographical location in which the total confirmed cases are the highest. This trend is also plotted on a histogram on the side bar panel, as the pattern can be better articulated since people are generally better at comparing lengths on a common scale as compared to shading or colour saturations ([@cleveland1984graphical]).
 
 As a case in point, it can be observed in this tab that after New York surpassed Washington on the 16th March 2020 in the total number of Covid-19 cases, they have since led the United States in this aspect up till this date.
 
 ### Tab 2: Positive Results in Covid-19 testing
 
-The dataset for this component originates from the NY Times (*Reference*). Covid-19 testing promotes early detection of community-acquired Covid-19 cases, which can support in public health response to the pandemic such as the allocation of resources for the more vulnerable regions. 
+<iframe width="720" height="400" src="../vid/tab2_example.mp4" frameborder="0" allowfullscreen>
 
-This section consists of two components. The first tab measures the percentage of Covid-19 tests returning positive on a given date and is charted on the US state map. Correspondingly, the second segment then depicts the aggregated test results as of the chosen date selected by the user. 
+</iframe>
 
+The dataset for this component originates from the NY Times (*Reference*). Covid-19 testing promotes early detection of community-acquired Covid-19 cases, which can support in public health response to the pandemic such as the allocation of resources for the more vulnerable regions.
+
+This section consists of two components. The first tab measures the percentage of Covid-19 tests returning positive on a given date and is charted on the US state map. Correspondingly, the second segment then depicts the aggregated test results as of the chosen date selected by the user. Not to mention, occasional anomalies (e.g. significant drop in tests or 100% positive test results) can be observed and is generally due to case definitions and non-reporting.
 
 # Self Review
 
 ## What was done well?
 
-**Layout**
-- Structure of the app was done well
-  - Manually divided user interface (ui) into grids using `fluidRow`
-  - Utilised tab panel to combine different tabs into a single panel
+The layout of the app was structured well. For instance, I utilised `fluidRow()`, to manually divide user interface into grids to my liking and `tabsetPanel()` to combine panels into a stack. Further, I customised the texts in the UI with `shing::tags$` functions to build specific HTML tags, it took me a while to figure out the different HTML tags!
 
-**Reactive Programming**
-- Used observeEvent() to explicitly trigger an action when action button is clicked
-- Added custom error message when no U.S. states are picked
+Next, reactive programming was done fairly well. To emphasise, due to the long running-tasks embedded in this app, it was not ideal to wait for the app to compute every reactive expression each time the user changes the input. For this reason, I applied `observeEvent()` function to delay computation of this reactive expression only until the action button is clicked.
 
-## What are the points I can improve on?
+## Areas of Improvement
 
-**Debugging Process**
-I could improve on the debugging process of the shiny app. The code execution wasn't as linear as the usual Rmd files I was accustomed to due to the reactive codes. For this assignment, I created a new Rmd file to make reference to when I ran into errors, which wasn't the best practice.
+Debugging shiny applications is something that I need to work on. Firstly, running reactive codes was problematic for me as I was accustomed to the usual R markdown file system. For this assignment, I created a new Rmd file to make reference to when I ran into errors, which was not the best practice. I should have made use of tools such as reactive graphs, log statements and breakpoints.
 
-**Organise large data files to optimise speed of App**
-  - Learn how to organise large data files in a shiny app to optimise performance
-    - Data consisted of more than 2 million observations
-    
-**Adding new graph on top of map to better communicate results**
-- In tab 2, map only shows geogrpahical location, users have to hover mouse to see which state does the trned correspond to.
-- Adding graph (e.g. dot point or histogram (*Plot above to compare*)) would better articulate this/
+Organising large data files to optimise the speed of the Shiny app was another aspect that I needed to improve on. In this case, the joined data set (Covid-19 cases and Map data) consisted of more than 2 million observations. For example, I could have used `geom_sf` or `leaflet()` map to plot the map instead of `geom_polygon` to reduce the object size. By doing it this way, I may not have to join all the map coordinates with the covid-19 data since I could overlay the map with the variables in the Covid-19 data.
 
-## What are some things that you'd like to add that's plausible?
+## Plausible Things I'd like to add
 
-**Multiple reactive Expressions**
-- Having more than one reactive expression 
-  - e.g. In tab 1, when a state is clicked on the U.S state map, the bar plot will automatically update to these states instead of always having to refer to the select input.
-  
-*Cancel long-running tasks while loading*
-- Due to the large amoung of data, it takes about 5 seconds or so to load when running locally.
-  - Ability to cancel task when loading
+In retrospect, I would add a plot or a new tab that showcase Covid-19 trends over time. In my current Shiny app, Covid-19 patterns were only shown at a point in time, and it may be difficult to compare the trends across countries over time to better understand the data.
 
-*Pre-populate or download shiny input based on URL parameters*
-- As the datasets are updated regularly, we may download directly from the source to provide a complete record of the ongoing outbreak.
+I would also like to add some technical details to the app:
 
-## What are some things that you'd like that add but cannot be done yet due to limitation in data/technology?
+-   **Plotly Input Events and multiple reactive expressions**: Access plotly input events after the map output is generated. For instance, clicking on the state(s) on the U.S. map automatically updates the bar graph to compare the trends of selected states.
 
-**Limitation of data**
-  - hospital vs deaths data (needed more data)
-  - Reliability of the data (elaborate on errors - e.g. due to different state jurisdictions or reporting requirements)
-  
-**Limitation due to technology**
-  - 
+-   **Cancel long-running tasks while loading:** Due to the large amount of data, it takes about 7 seconds or so to load when running locally, and users cannot do anything until the function finish running. I want to add a 'cancel button' so users can cancel the computation of reactive expression any time.
+
+-   **Pre-populate or download shiny input based on URL parameters** As the Covid-19 datasets are updated regularly, I would add a download link for users to directly download data directly from the source (e.g. data from GitHub) to provide a complete and up-to-date data of the ongoing outbreak in the Shiny App.
+
+## Limitations of Data/Technology
+
+```{r}
+tests_grades <- us_state_tests %>%
+  filter(date == "2020-10-07",
+         !is.na(data_quality)) %>%
+  select(state, data_quality) %>%
+  distinct(state, data_quality) %>%
+  arrange(state) %>%
+  rename(State = state,
+         `Data Quality` = data_quality)
+
+dt <- tests_grades %>% 
+  DT::datatable(
+    class = 'cell-border stripe',
+    rownames = FALSE,
+    escape = FALSE,
+    options = list(pageLength = 5,
+                   autoWidth = TRUE,
+                   scrollY = "250px"),
+    caption = htmltools::tags$caption(style = 'caption-side: top; text-align: center; color:black; font-size:150% ;','State Grading System for Traceability of Covid-19 Data') )
+
+# Frame table
+widgetframe::frameWidget(dt)
+```
+
+A limitation to this Shiny App is the credibility of the data. Due to the various state jurisdictions, case definitions and reporting requirements of each U.S state, the reported values may be subjected to significant variations. To illustrate, in the data retrieved from *covidtracking.com*, numerous US states did not report the negative results of the covid-19 testing. The 'state grading system' (shown in the table below) reveals the data completeness of the total Covid-19 testing in each state (breakdown and criteria for the grades can be found  [here](https://docs.google.com/spreadsheets/u/1/d/e/2PACX-1vRL2zG1o-qj9l2sl19d1lj1oHd6WbkJ0ukFwN04a_ms_ANUdgxTMpI7AF-gbQzwOSreJUDx6PEK7Vnq/pubhtml)). 
+
+
+# R Packages Used
+
+The following packages used in the coding script:
+
+- tidyverse package (@tidyverse)
+
+- htmltools package (@htmltools)
+
+- widgetframe package (@widgetframe)
+
+- DT package (@DT)
+
+# References
