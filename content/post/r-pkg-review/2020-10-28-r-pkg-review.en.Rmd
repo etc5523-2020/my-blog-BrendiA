@@ -1,0 +1,102 @@
+---
+title: r-pkg-review
+author: Brendi
+date: '2020-10-28'
+slug: r-pkg-review
+categories:
+  - R
+tags:
+  - Academic
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-10-28T21:40:24+11:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, echo = FALSE)
+
+# Load library
+library(tidyverse)
+```
+
+# Overview
+
+In this blog, I will be reviewing Lingling Bai's `covda` R package, which is developed for the ETC5523 Package assignment. The package repository is publicly available on GitHub [GitHub](https://github.com/etc5523-2020/r-package-assessment-AntiRosa). The intended purpose of this shiny package is to provide an embedded interactive Shiny application within the package that allow users to explore a Covid-19 related data. To be more specific, the R package should have an exported function `launch_app()` which load the aforementioned Shiny application; along with some functions that refactors the user interface or server-side functions within the application. 
+
+In reviewing this R package, I will be utilising a check list adapted from the [ropensci review template](https://devguide.ropensci.org/reviewtemplate.html) for reference, this check list can be found in the appendix of this blog. 
+
+# Functionality of the Package
+
+According to the `README` file, the goal of this package is to analyse Covid-19 cases across countries. 
+
+This package may also be installed via the code:
+
+```{r, eval = FALSE}
+devtools::install_github("etc5523-2020/r-package-assessment-AntiRosa") # Could not run
+```
+
+
+## Area of Improvements 
+
+
+
+
+
+
+
+
+
+# Appendix
+
+## Package Review
+
+### Documentation
+
+The package includes all the following forms of documentation:
+
+-   [x] **Installation instructions:** for the package is
+    found in README
+
+-   [ ] **Vignette(s)** demonstrating major functionality that runs
+    successfully locally
+
+-   [ ] **Function Documentation:** for all exported functions in R help
+
+-   [ ] **Examples** for all exported functions in R Help that run
+    successfully locally
+
+#### Comments
+
+- README contains clear instructions to install package, however, it should be noted that the package may not be installed on CRAN as stated in the README. 
+
+- No vignettes and exported functions provided in this package.
+
+
+### Functionality
+
+-   [ ] **Installation:** Installation succeeds as documented.
+
+-   [ ] **Functionality:** Any functional claims of the software been
+    confirmed.
+
+-   [ ] **Automated tests:** Unit tests cover essential functions of the
+    package and a reasonable range of inputs and conditions. All tests
+    pass on the local machine.
+
+#### Comments
+
+- Code to install package directly from github, `install_github("etc5523-2020/r-package-assessment-AntiRosa")` could not be run.
+
+- No unit tests were conducted.
+
+
