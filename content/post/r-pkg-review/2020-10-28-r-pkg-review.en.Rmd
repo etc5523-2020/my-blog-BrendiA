@@ -40,7 +40,7 @@ refactors the user interface or server-side functions within the application.
 
 ## Did it do it?
 
-According to the `README` file, the goal of this package is to analyse Covid-19 cases across countries. This package may also be installed via the code:
+According to the `README` file, the goal of this package is to analyse Covid-19 cases across countries. This package may be installed via the code:
 
 ```{r, echo = TRUE, eval = FALSE}
 devtools::install_github("etc5523-2020/r-package-assessment-AntiRosa")
@@ -71,7 +71,7 @@ ran into errors when I ran the code `devtools::install()` in the repository). Fu
   </div>
 </div>
 
-Two `.Rproj` were enclosed in the working directory, one in the main working directory (`r-package-assessment-AntiRosa.Rproj`) and the other in the `covdata` directory. I attempted to resolve the issues related to building the R package in both .Rproj, but to no avail. However, The `covdata` .Rproj seemed to be more comprehensive than the other R project. For this reason, I will examine the R package related to `covdata.Rproj`.
+Two `.Rproj` were enclosed in the working directory, one in the main working directory (`r-package-assessment-AntiRosa.Rproj`) and the other in the `covdata` directory. I attempted to resolve the issues related to building the R package in both .Rproj, but to no avail. However, The `covdata` .Rproj seemed to be more comprehensive than the other R project, and for this reason, I will examine the R package related to `covdata.Rproj`.
 
 ## Are there improvements that could be made to the code?
 
@@ -85,7 +85,7 @@ There was no Shiny application embedded in the R package or the package reposito
 
 ## Is the documentation sufficient to get started?
 
-There were minimal documentation made in this package and there were no exported functions.
+There were minimal documentation made in this package and no exported functions.
 
 ## What I have Learned from Reviewing
 
