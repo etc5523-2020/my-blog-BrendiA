@@ -32,15 +32,13 @@ editor_options:
 <p>In this blog, I will be reviewing Lingling Bai’s <code>covda</code> R package, which is developed for the ETC5523 Package assignment. The package repository is publicly available on <a href="https://github.com/etc5523-2020/r-package-assessment-AntiRosa">GitHub</a>. In reviewing this R package, I have cloned her package repository and will be utilising a check list adapted from the <a href="https://devguide.ropensci.org/reviewtemplate.html">ropensci review template</a> for reference, this check list can be found in the appendix of this blog.</p>
 <div id="what-did-i-think-this-package-would-do" class="section level2">
 <h2>What did I think this package would do?</h2>
-<p>The intended purpose of this shiny package is to provide an embedded interactive Shiny application within the package that allow users to explore a Covid-19 related data. To be more specific, the R package should have an exported function <code>launch_app()</code> which load the aforementioned Shiny application; along with some functions that
-refactors the user interface or server-side functions within the application.</p>
+<p>The intended purpose of this shiny package is to provide an embedded interactive Shiny application within the package that allow users to explore a Covid-19 related data. To be more specific, the R package should have an exported function <code>launch_app()</code> which load the aforementioned Shiny application; along with some functions that refactors the user interface or server-side functions within the application.</p>
 </div>
 <div id="did-it-do-it" class="section level2">
 <h2>Did it do it?</h2>
 <p>According to the <code>README</code> file, the goal of this package is to analyse Covid-19 cases across countries. This package may be installed via the code:</p>
 <pre class="r"><code>devtools::install_github(&quot;etc5523-2020/r-package-assessment-AntiRosa&quot;)</code></pre>
-<p>When I tried running the code above, it could not run. Accordingly, I looked to examine the package’s repository. In trying to rectifying this error, I learnt that the package could not be built/installed (<em>i.e.</em> I
-ran into errors when I ran the code <code>devtools::install()</code> in the repository). Furthermore, there were a few examples of the codes found in the README file were not related to a Covid-19 dataset.</p>
+<p>When I tried running the code above, it could not run. Accordingly, I looked to examine the package’s repository. In trying to rectifying this error, I learnt that the package could not be built/installed (<em>i.e.</em> I ran into some errors when I ran the code <code>devtools::install()</code> in the repository). Furthermore, there were a few examples of the codes found in the README file were not related to a Covid-19 dataset.</p>
 <head>
 <style>
 
@@ -55,7 +53,7 @@ ran into errors when I ran the code <code>devtools::install()</code> in the repo
 <body>
 <div class="clearfix">
 <div class="img-container">
-<img src = "../images/dir_tree1.png" width="120%" height="150%"/>
+<img src = "../../images/dir_tree1.png" width="120%" height="150%"/>
 </div>
 <div class="img-container">
 <img src = "../images/dir_tree2.png" width="120%" height="150%"/>
@@ -65,7 +63,7 @@ ran into errors when I ran the code <code>devtools::install()</code> in the repo
 </div>
 <div id="are-there-improvements-that-could-be-made-to-the-code" class="section level2">
 <h2>Are there improvements that could be made to the code?</h2>
-<p>Although the R package was not available for use, the package structure followed the general procedures, such as having R functions that you want in the package to be in the R directory, as shown above in the working directory tree.</p>
+<p>Although the R package was not available for use, the package structure followed the general procedures, such as having a suitable license, storing documentations and functions in the R directory, and holding scripts that generate datasets in the data-raw directory. The package skeleton is shown above in the working directory tree.</p>
 <p>There were no exported functions in this R package (<em>i.e.</em> No code found in NAMESPACE folder). Some R scripts could be found in the R folder of the package repository, however, none of the scripts were related to a Covid-19 data. Also, some functions such as <code>key_crop_yields</code> and <code>stack-normalise</code> were not used in the package, but was documented as part of the package.</p>
 </div>
 <div id="are-there-improvements-that-could-be-made-to-the-shiny-app-inside-the-package" class="section level2">
@@ -79,9 +77,9 @@ ran into errors when I ran the code <code>devtools::install()</code> in the repo
 <div id="what-i-have-learned-from-reviewing" class="section level2">
 <h2>What I have Learned from Reviewing</h2>
 <ul>
-<li><p>It is is good practice to run <code>devtools::check()</code> from time to time to ensure that functions are working and the package may be loaded properly. Debugging may be a chore if we do not do this!</p></li>
+<li><p>It is is good practice to run <code>devtools::check()</code> from time to time to ensure that functions are working and the package may be loaded properly. Debugging can be a chore if we do not do this!</p></li>
 <li><p>Proper documentation is an important aspect of an R package. Without it, users will not be able to understand what the package does or the functionalities of it.</p></li>
-<li><p>README file should highlight how users can access the package, the requirements needed to use the package, and how users can use it.</p></li>
+<li><p>README file should highlight how users can access the package, the requirements needed to load and install the package, and how users can use it.</p></li>
 </ul>
 </div>
 </div>

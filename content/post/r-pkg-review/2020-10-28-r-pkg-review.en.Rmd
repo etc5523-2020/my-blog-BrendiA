@@ -45,7 +45,8 @@ According to the `README` file, the goal of this package is to analyse Covid-19 
 devtools::install_github("etc5523-2020/r-package-assessment-AntiRosa")
 ```
 
-When I tried running the code above, it could not run. Accordingly, I looked to examine the package's repository. In trying to rectifying this error, I learnt that the package could not be built/installed (*i.e.* I ran into some errors when I ran the code `devtools::install()` in the repository). Furthermore, there were a few examples of the codes found in the README file were not related to a Covid-19 dataset.
+When I tried running the code above, it could not run. Accordingly, I looked to examine the package's repository. In trying to rectifying this error, I learnt that the package could not be built/installed (*i.e.* I ran into some errors when I ran the code `devtools::install()` in the repository). Furthermore, there were a few examples of the codes found in the README file were not related to a Covid-19 dataset. 
+
 
 <head>
 <style>
@@ -62,7 +63,7 @@ When I tried running the code above, it could not run. Accordingly, I looked to 
 
 <div class="clearfix">
   <div class="img-container">
-  <img src = "../images/dir_tree1.png" width="120%" height="150%"/>
+  <img src = "../../images/dir_tree1.png" width="120%" height="150%"/>
   </div>
   <div class="img-container">
   <img src = "../images/dir_tree2.png" width="120%" height="150%"/>
