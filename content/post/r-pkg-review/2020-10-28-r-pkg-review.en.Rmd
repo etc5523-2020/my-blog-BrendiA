@@ -35,8 +35,7 @@ In this blog, I will be reviewing Lingling Bai's `covda` R package, which is dev
 
 ## What did I think this package would do? 
 
-The intended purpose of this shiny package is to provide an embedded interactive Shiny application within the package that allow users to explore a Covid-19 related data. To be more specific, the R package should have an exported function `launch_app()` which load the aforementioned Shiny application; along with some functions that
-refactors the user interface or server-side functions within the application.
+The intended purpose of this shiny package is to provide an embedded interactive Shiny application within the package that allow users to explore a Covid-19 related data. To be more specific, the R package should have an exported function `launch_app()` which load the aforementioned Shiny application; along with some functions that refactors the user interface or server-side functions within the application.
 
 ## Did it do it?
 
@@ -46,8 +45,7 @@ According to the `README` file, the goal of this package is to analyse Covid-19 
 devtools::install_github("etc5523-2020/r-package-assessment-AntiRosa")
 ```
 
-When I tried running the code above, it could not run. Accordingly, I looked to examine the package's repository. In trying to rectifying this error, I learnt that the package could not be built/installed (*i.e.* I
-ran into errors when I ran the code `devtools::install()` in the repository). Furthermore, there were a few examples of the codes found in the README file were not related to a Covid-19 dataset.
+When I tried running the code above, it could not run. Accordingly, I looked to examine the package's repository. In trying to rectifying this error, I learnt that the package could not be built/installed (*i.e.* I ran into some errors when I ran the code `devtools::install()` in the repository). Furthermore, there were a few examples of the codes found in the README file were not related to a Covid-19 dataset.
 
 <head>
 <style>
@@ -75,7 +73,7 @@ Two `.Rproj` were enclosed in the working directory, one in the main working dir
 
 ## Are there improvements that could be made to the code?
 
-Although the R package was not available for use, the package structure followed the general procedures, such as having R functions that you want in the package to be in the R directory, as shown above in the working directory tree.
+Although the R package was not available for use, the package structure followed the general procedures, such as having a suitable license, storing documentations and functions in the R directory, and holding scripts that generate datasets in the data-raw directory. The package skeleton is shown above in the working directory tree.
 
 There were no exported functions in this R package (*i.e.* No code found in NAMESPACE folder). Some R scripts could be found in the R folder of the package repository, however, none of the scripts were related to a Covid-19 data. Also, some functions such as `key_crop_yields` and `stack-normalise` were not used in the package, but was documented as part of the package.
 
@@ -89,11 +87,11 @@ There were minimal documentation made in this package and no exported functions.
 
 ## What I have Learned from Reviewing
 
--   It is is good practice to run `devtools::check()` from time to time to ensure that functions are working and the package may be loaded properly. Debugging may be a chore if we do not do this!
+-   It is is good practice to run `devtools::check()` from time to time to ensure that functions are working and the package may be loaded properly. Debugging can be a chore if we do not do this!
 
 -   Proper documentation is an important aspect of an R package. Without it, users will not be able to understand what the package does or the functionalities of it.
 
--   README file should highlight how users can access the package, requirements needed to use the package, and how users can use it.
+-   README file should highlight how users can access the package, the requirements needed to load and install the package, and how users can use it.
 
 # Appendix
 
