@@ -63,10 +63,10 @@ When I tried running the code above, it could not run. Accordingly, I looked to 
 
 <div class="clearfix">
   <div class="img-container">
-  <img src = "../../images/dir_tree1.png" width="120%" height="150%"/>
+  <img src = "/static/img/dir_tree1.png" width="120%" height="150%"/>
   </div>
   <div class="img-container">
-  <img src = "../images/dir_tree2.png" width="120%" height="150%"/>
+  <img src = "/static/img/dir_tree2.png" width="120%" height="150%"/>
   </div>
 </div>
 
