@@ -5,12 +5,121 @@
     <link>/tag/academic/</link>
       <atom:link href="/tag/academic/index.xml" rel="self" type="application/rss+xml" />
     <description>Academic</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Thu, 17 Sep 2020 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Wed, 28 Oct 2020 00:00:00 +0000</lastBuildDate>
     <image>
       <url>/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_2.png</url>
       <title>Academic</title>
       <link>/tag/academic/</link>
     </image>
+    
+    <item>
+      <title>r-pkg-review</title>
+      <link>/post/r-pkg-review/r-pkg-review/</link>
+      <pubDate>Wed, 28 Oct 2020 00:00:00 +0000</pubDate>
+      <guid>/post/r-pkg-review/r-pkg-review/</guid>
+      <description>
+&lt;script src=&#34;/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;/rmarkdown-libs/anchor-sections/anchor-sections.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;/rmarkdown-libs/anchor-sections/anchor-sections.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;div id=&#34;overview&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Overview&lt;/h1&gt;
+&lt;p&gt;In this blog, I will be reviewing Lingling Bai’s &lt;code&gt;covda&lt;/code&gt; R package, which is developed for the ETC5523 Package assignment. The package repository is publicly available on GitHub &lt;a href=&#34;https://github.com/etc5523-2020/r-package-assessment-AntiRosa&#34;&gt;GitHub&lt;/a&gt;. In reviewing this R package, I have cloned her package repository and will be utilising a check list adapted from the &lt;a href=&#34;https://devguide.ropensci.org/reviewtemplate.html&#34;&gt;ropensci review template&lt;/a&gt; for reference, this check list can be found in the appendix of this blog.&lt;/p&gt;
+&lt;div id=&#34;what-did-i-think-this-package-would-do&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;What did I think this package would do?&lt;/h2&gt;
+&lt;p&gt;The intended purpose of this shiny package is to provide an embedded interactive Shiny application within the package that allow users to explore a Covid-19 related data. To be more specific, the R package should have an exported function &lt;code&gt;launch_app()&lt;/code&gt; which load the aforementioned Shiny application; along with some functions that
+refactors the user interface or server-side functions within the application.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;did-it-do-it&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Did it do it?&lt;/h2&gt;
+&lt;p&gt;According to the &lt;code&gt;README&lt;/code&gt; file, the goal of this package is to analyse Covid-19 cases across countries. This package may also be installed via the code:&lt;/p&gt;
+&lt;p&gt;When I tried running the code above, it could not run. Accordingly, I looked to examine the package’s repository. In trying to rectifying this error, I learnt that the package could not be built/installed (&lt;em&gt;i.e.&lt;/em&gt; I
+ran into errors when I ran the code &lt;code&gt;devtools::install()&lt;/code&gt; in the repository). Furthermore, there were a few examples of the codes found in the README file were not related to a Covid-19 dataset.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;images/dir_tree1.png&#34; width=&#34;262&#34; /&gt;&lt;img src=&#34;images/dir_tree2.png&#34; width=&#34;228&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Two &lt;code&gt;.Rproj&lt;/code&gt; were enclosed in the working directory, one in the main working directory (&lt;code&gt;r-package-assessment-AntiRosa.Rproj&lt;/code&gt;) and the other in the &lt;code&gt;covdata&lt;/code&gt; directory. The &lt;code&gt;covdata&lt;/code&gt; .Rproj seemed to be more comprehensive than the other R project. However, I attempted to resolve the issues related to building the R package in both .Rproj, but to no avail. Nevertheless, I will examine the R package related to &lt;code&gt;covdata.Rproj&lt;/code&gt; as it is more complete.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;are-there-improvements-that-could-be-made-to-the-code&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Are there improvements that could be made to the code?&lt;/h2&gt;
+&lt;p&gt;Although the R package was not available for use, the package structure followed the general procedures, such as having R functions that you want in the package to be in the R directory, as shown above in the working directory tree.&lt;/p&gt;
+&lt;p&gt;There were no exported functions in this R package (&lt;em&gt;i.e.&lt;/em&gt; No code found in NAMESPACE folder). Some R scripts could be found in the R folder of the package repository, however, none of the scripts were related to a Covid-19 data. Also, some functions such as &lt;code&gt;key_crop_yields&lt;/code&gt; and &lt;code&gt;stack-normalise&lt;/code&gt; were not used in the package, but was documented as part of the package.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;are-there-improvements-that-could-be-made-to-the-shiny-app-inside-the-package&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Are there improvements that could be made to the shiny app inside the package?&lt;/h2&gt;
+&lt;p&gt;There was no Shiny application embedded in the R package or the package repository, and the &lt;code&gt;launch_app()&lt;/code&gt; function was not available.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;is-the-documentation-sufficient-to-get-started&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Is the documentation sufficient to get started?&lt;/h2&gt;
+&lt;p&gt;There were minimal documentation made in this package as there were no exported functions.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;what-i-have-learned-from-reviewing&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;What I have Learned from Reviewing&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;It is is good practice to run &lt;code&gt;devtools::check()&lt;/code&gt; from time to time to ensure that functions are working and the package may be loaded properly. Debugging may be a chore if we do not do this!&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Proper documentation is an important aspect of an R package. Without it, users will not be able to understand what the package does or the functionalities of it.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;README file should highlight how users can access the package, requirements needed to use the package, and how users can use it.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;appendix&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Appendix&lt;/h1&gt;
+&lt;div id=&#34;package-review&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Package Review&lt;/h2&gt;
+&lt;div id=&#34;documentation&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Documentation&lt;/h3&gt;
+&lt;div id=&#34;x-indicates-that-criteria-was-met.&#34; class=&#34;section level5&#34;&gt;
+&lt;h5&gt;[x] indicates that criteria was met.&lt;/h5&gt;
+&lt;p&gt;The package includes all the following forms of documentation:&lt;/p&gt;
+&lt;ul class=&#34;task-list&#34;&gt;
+&lt;li&gt;&lt;p&gt;&lt;input type=&#34;checkbox&#34; disabled=&#34;&#34; checked=&#34;&#34; /&gt;
+&lt;strong&gt;Installation instructions:&lt;/strong&gt; for the package is found in
+README&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;input type=&#34;checkbox&#34; disabled=&#34;&#34; /&gt;
+&lt;strong&gt;Vignette(s)&lt;/strong&gt; demonstrating major functionality that runs
+successfully locally&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;input type=&#34;checkbox&#34; disabled=&#34;&#34; /&gt;
+&lt;strong&gt;Function Documentation:&lt;/strong&gt; for all exported functions in R help&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;input type=&#34;checkbox&#34; disabled=&#34;&#34; /&gt;
+&lt;strong&gt;Examples:&lt;/strong&gt; for all exported functions in R Help that run
+successfully locally&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;comments&#34; class=&#34;section level4&#34;&gt;
+&lt;h4&gt;Comments&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;README provided instructions on how to install the package.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Vignettes could not run locally and no exported functions are
+provided in this package.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;functionality&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Functionality&lt;/h3&gt;
+&lt;ul class=&#34;task-list&#34;&gt;
+&lt;li&gt;&lt;p&gt;&lt;input type=&#34;checkbox&#34; disabled=&#34;&#34; /&gt;
+&lt;strong&gt;Installation:&lt;/strong&gt; Installation succeeds as documented.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;input type=&#34;checkbox&#34; disabled=&#34;&#34; /&gt;
+&lt;strong&gt;Functionality:&lt;/strong&gt; Any functional claims of the software been
+confirmed.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;input type=&#34;checkbox&#34; disabled=&#34;&#34; /&gt;
+&lt;strong&gt;Automated tests:&lt;/strong&gt; Unit tests cover essential functions of the
+package and a reasonable range of inputs and conditions. All tests
+pass on the local machine.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div id=&#34;comments-1&#34; class=&#34;section level4&#34;&gt;
+&lt;h4&gt;Comments&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Code to install package directly from github
+&lt;code&gt;install_github(&#34;etc5523-2020/r-package-assessment-AntiRosa&#34;)&lt;/code&gt; could
+not be run.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;No proper unit tests were conducted.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>A short Story of COVID-19 in South Africa</title>

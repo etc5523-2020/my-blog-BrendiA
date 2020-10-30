@@ -1,5 +1,5 @@
 ---
-title: r-pkg-review
+title: R Package 'covda' Review
 author: Brendi
 date: '2020-10-28'
 slug: r-pkg-review
@@ -23,38 +23,77 @@ editor_options:
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, echo = FALSE, fig.show = "hold")
 
-# Load library
 library(tidyverse)
+library(knitr)
 ```
 
 # Overview
 
-In this blog, I will be reviewing Lingling Bai's `covda` R package, which is developed for the ETC5523 Package assignment. The package repository is publicly available on GitHub [GitHub](https://github.com/etc5523-2020/r-package-assessment-AntiRosa). The intended purpose of this shiny package is to provide an embedded interactive Shiny application within the package that allow users to explore a Covid-19 related data. To be more specific, the R package should have an exported function `launch_app()` which load the aforementioned Shiny application; along with some functions that refactors the user interface or server-side functions within the application. 
+In this blog, I will be reviewing Lingling Bai's `covda` R package, which is developed for the ETC5523 Package assignment. The package repository is publicly available on [GitHub](https://github.com/etc5523-2020/r-package-assessment-AntiRosa). In reviewing this R package, I have cloned her package repository and will be utilising a check list adapted from the [ropensci review template](https://devguide.ropensci.org/reviewtemplate.html) for reference, this check list can be found in the appendix of this blog.
 
-In reviewing this R package, I will be utilising a check list adapted from the [ropensci review template](https://devguide.ropensci.org/reviewtemplate.html) for reference, this check list can be found in the appendix of this blog. 
+## What did I think this package would do? 
 
-# Functionality of the Package
+The intended purpose of this shiny package is to provide an embedded interactive Shiny application within the package that allow users to explore a Covid-19 related data. To be more specific, the R package should have an exported function `launch_app()` which load the aforementioned Shiny application; along with some functions that
+refactors the user interface or server-side functions within the application.
 
-According to the `README` file, the goal of this package is to analyse Covid-19 cases across countries. 
+## Did it do it?
 
-This package may also be installed via the code:
+According to the `README` file, the goal of this package is to analyse Covid-19 cases across countries. This package may also be installed via the code:
 
-```{r, eval = FALSE}
-devtools::install_github("etc5523-2020/r-package-assessment-AntiRosa") # Could not run
+```{r, echo = TRUE, eval = FALSE}
+devtools::install_github("etc5523-2020/r-package-assessment-AntiRosa")
 ```
 
+When I tried running the code above, it could not run. Accordingly, I looked to examine the package's repository. In trying to rectifying this error, I learnt that the package could not be built/installed (*i.e.* I
+ran into errors when I ran the code `devtools::install()` in the repository). Furthermore, there were a few examples of the codes found in the README file were not related to a Covid-19 dataset.
 
-## Areas of Improvements 
+<head>
+<style>
 
+.img-container {
+  float: left;
+  width: 50%;
+  padding: 5px;
+}
 
+</style>
+</head>
+<body>
 
+<div class="clearfix">
+  <div class="img-container">
+  <img src = "../images/dir_tree1.png" width="120%" height="150%"/>
+  </div>
+  <div class="img-container">
+  <img src = "../images/dir_tree2.png" width="120%" height="150%"/>
+  </div>
+</div>
 
+Two `.Rproj` were enclosed in the working directory, one in the main working directory (`r-package-assessment-AntiRosa.Rproj`) and the other in the `covdata` directory. I attempted to resolve the issues related to building the R package in both .Rproj, but to no avail. However, The `covdata` .Rproj seemed to be more comprehensive than the other R project. For this reason, I will examine the R package related to `covdata.Rproj`.
 
+## Are there improvements that could be made to the code?
 
+Although the R package was not available for use, the package structure followed the general procedures, such as having R functions that you want in the package to be in the R directory, as shown above in the working directory tree.
 
+There were no exported functions in this R package (*i.e.* No code found in NAMESPACE folder). Some R scripts could be found in the R folder of the package repository, however, none of the scripts were related to a Covid-19 data. Also, some functions such as `key_crop_yields` and `stack-normalise` were not used in the package, but was documented as part of the package.
 
+## Are there improvements that could be made to the shiny app inside the package?
+
+There was no Shiny application embedded in the R package or the package repository, and the `launch_app()` function was not available.
+
+## Is the documentation sufficient to get started?
+
+There were minimal documentation made in this package and there were no exported functions.
+
+## What I have Learned from Reviewing
+
+-   It is is good practice to run `devtools::check()` from time to time to ensure that functions are working and the package may be loaded properly. Debugging may be a chore if we do not do this!
+
+-   Proper documentation is an important aspect of an R package. Without it, users will not be able to understand what the package does or the functionalities of it.
+
+-   README file should highlight how users can access the package, requirements needed to use the package, and how users can use it.
 
 # Appendix
 
@@ -62,25 +101,27 @@ devtools::install_github("etc5523-2020/r-package-assessment-AntiRosa") # Could n
 
 ### Documentation
 
+-   [x] To note, indicates that criteria was met.
+
 The package includes all the following forms of documentation:
 
--   [x] **Installation instructions:** for the package is
-    found in README
+-   [x] **Installation instructions:** for the package is found in
+    README
 
 -   [ ] **Vignette(s)** demonstrating major functionality that runs
     successfully locally
 
 -   [ ] **Function Documentation:** for all exported functions in R help
 
--   [ ] **Examples** for all exported functions in R Help that run
+-   [ ] **Examples:** for all exported functions in R Help that run
     successfully locally
 
-#### Comments
+### Comments
 
-- README contains clear instructions to install package, however, it should be noted that the package may not be installed on CRAN as stated in the README. 
+-   README provided instructions on how to install the package.
 
-- No vignettes and exported functions provided in this package.
-
+-   Vignettes could not run locally and no exported functions are
+    provided in this package.
 
 ### Functionality
 
@@ -93,10 +134,10 @@ The package includes all the following forms of documentation:
     package and a reasonable range of inputs and conditions. All tests
     pass on the local machine.
 
-#### Comments
+### Comments
 
-- Code to install package directly from github, `install_github("etc5523-2020/r-package-assessment-AntiRosa")` could not be run.
+-   Code to install package directly from github
+    `install_github("etc5523-2020/r-package-assessment-AntiRosa")` could
+    not be run.
 
-- No unit tests were conducted.
-
-
+-   No proper unit tests were conducted.
